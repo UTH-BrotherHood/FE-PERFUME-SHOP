@@ -9,6 +9,8 @@ export default {
         "primary": "#4D2952",
         "secondary": "#5F6C72",
         "border": "#C4C4C4",
+        "text": "#fff",
+        "text-secondary": "#383838",
 
 
        
