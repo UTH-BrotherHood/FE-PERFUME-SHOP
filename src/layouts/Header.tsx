@@ -1,3 +1,4 @@
+<<<<<<< main
 import { Link } from "react-router-dom"
 import SearchIcon from "../components/svg/SearchIcon"
 import Logo from "../components/svg/LogoIcon"
