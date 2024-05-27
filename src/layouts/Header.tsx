@@ -4,10 +4,11 @@ import Logo from "../components/svg/LogoIcon"
 import User from "../components/svg/UserIcon"
 import HeartIcon from "../components/svg/HeartIcon"
 import CartIcon from "../components/svg/CartIcon"
+
 function Header() {
   return (
     <>
-      <div className="text-text-secondary">
+      <div className="text-text-secondary mb-3">
 
         <div className="flex justify-between items-center py-1 px-[3rem] bg-primary text-text">
           <div></div>
@@ -30,7 +31,9 @@ function Header() {
           </div>
           {/* logo */}
           <div>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </div>
           <div className="flex gap-[2rem]">
             <Link to="/MyAccount" className="flex justify-between items-center gap-2">
