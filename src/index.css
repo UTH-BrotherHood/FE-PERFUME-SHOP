@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+*{
+    font-family: 'popins', sans-serif;
+}
+
+.main-menu > a {
+    position: relative;
+    text-decoration: none; 
+    color: inherit; 
+  }
+  
+  .main-menu > a::before {
+    content: "";
+    height: 2px;
+    width: 0px;
+    background: #4D2952;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    margin-bottom: -5px;
+    transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  
+  .main-menu > a:hover::before {
+    width: 100%;
+  }
+  

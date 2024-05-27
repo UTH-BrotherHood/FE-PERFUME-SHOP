@@ -3,6 +3,7 @@ import { publicRoutes } from "./Routes";
 import MainLayout from "./layouts/MainLayout";
 import NotFound from "./pages/NotFound";
 
+
 function App() {
   return (
     <Router>
