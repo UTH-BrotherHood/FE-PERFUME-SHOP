@@ -4,7 +4,20 @@ export default {
     './src/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "primary": "#4D2952",
+        "secondary": "#5F6C72",
+        "border": "#C4C4C4",
+
+
+       
+      },
+      fontFamily: {
+        publicsan: ["Public Sans", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 }
