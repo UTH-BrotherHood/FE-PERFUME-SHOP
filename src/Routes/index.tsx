@@ -1,6 +1,7 @@
 import MainLayout from "../layouts/MainLayout";
 import CouponPage from "../pages/CouponPage";
 import HomePage from "../pages/HomePage";
+import ShippingState from "../pages/ShippingState";
 
 
 interface Route {
@@ -18,6 +19,11 @@ const publicRoutes: Route[] = [
     {
         path: "/couponpage",
         component: CouponPage,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
+    {
+        path: "/shipping-state",
+        component: ShippingState,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
     },
 
