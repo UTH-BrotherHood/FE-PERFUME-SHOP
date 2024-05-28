@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import MainLayout from "../layouts/MainLayout";
 import CouponPage from "../pages/CouponPage";
 import HomePage from "../pages/HomePage";
