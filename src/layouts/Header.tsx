@@ -1,4 +1,3 @@
-<<<<<<< main
 import { Link } from "react-router-dom"
 import SearchIcon from "../components/svg/SearchIcon"
 import Logo from "../components/svg/LogoIcon"
@@ -7,10 +6,26 @@ import HeartIcon from "../components/svg/HeartIcon"
 import CartIcon from "../components/svg/CartIcon"
 
 function Header() {
+  const navItems = [
+    { path: "/Perfumes", label: "Perfumes" },
+    { path: "/Brands", label: "Brands" },
+    { path: "/Skincare", label: "Skincare" },
+    { path: "/Makeup", label: "Makeup" },
+    { path: "/Haircare", label: "Haircare" },
+    { path: "/Aromatherapy", label: "Aromatherapy" },
+    { path: "/Candles", label: "Candles" },
+    { path: "/Gifts", label: "Gifts" }
+  ];
+
+  const userLinks = [
+    { path: "/MyAccount", label: "My Account", icon: <User /> },
+    { path: "/MyAccount", label: "Wishlist", icon: <HeartIcon /> },
+    { path: "/MyAccount", label: "My Items", icon: <CartIcon /> }
+  ];
+
   return (
     <>
       <div className="text-text-secondary mb-3">
-
         <div className="flex justify-between items-center py-1 px-[3rem] bg-primary text-text">
           <div></div>
           <div><p>🔥 Only 11 days left until VALENTINE'S DAY! 🔥</p></div>
@@ -23,7 +38,7 @@ function Header() {
         <div className="flex justify-between items-center py-[1.725rem] px-[3rem]">
           {/* search */}
           <div>
-            <form action="" className="flex justify-between w-[25rem] border-[1px] px-[2rem] py-[0.55rem] rounded-[1.8125rem] ">
+            <form action="" className="flex justify-between w-[25rem] border-[1px] px-[2rem] py-[0.55rem] rounded-[1.8125rem]">
               <input type="text" className="w-[80%] focus:outline-none" placeholder="Hey, what are you looking for?" />
               <button>
                 <SearchIcon />
@@ -37,34 +52,22 @@ function Header() {
             </Link>
           </div>
           <div className="flex gap-[2rem]">
-            <Link to="/MyAccount" className="flex justify-between items-center gap-2">
-              <User />
-              My Account
-            </Link>
-            <Link to="/MyAccount" className="flex justify-between items-center gap-2">
-              <HeartIcon />
-              Wishlist
-            </Link>
-            <Link to="/MyAccount" className="flex justify-between items-center gap-2">
-              <CartIcon />
-              My Items
-            </Link>
+            {userLinks.map(link => (
+              <Link key={link.label} to={link.path} className="flex justify-between items-center gap-2">
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
         <div>
-          <nav className="main-menu flex justify-center items-center py-3 px-[17rem] gap-[3rem] ">
-            <Link to="/Perfumes">Perfumes</Link>
-            <Link to="/Brands">Brands</Link>
-            <Link to="/Skincare">Skincare</Link>
-            <Link to="/Makeup">Makeup</Link>
-            <Link to="/Haircare">Haircare</Link>
-            <Link to="/Aromatherapy">Aromatherapy</Link>
-            <Link to="/Candles">Candles</Link>
-            <Link to="/Gifts">Gifts</Link>
+          <nav className="main-menu flex justify-center items-center py-3 px-[17rem] gap-[3rem]">
+            {navItems.map(item => (
+              <Link key={item.path} to={item.path}>{item.label}</Link>
+            ))}
           </nav>
         </div>
-
       </div>
     </>
   )
