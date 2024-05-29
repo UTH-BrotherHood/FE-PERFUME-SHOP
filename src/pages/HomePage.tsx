@@ -1,4 +1,3 @@
-import React from 'react'
 import AdsSlide from '../components/Home/AdsSlide'
 import Widget from '../components/Home/Widget'
 import ShopCollection from '../components/Home/ShopCollection'
@@ -8,13 +7,13 @@ import BestSeller from '../components/Home/BestSeller'
 
 function HomePage() {
   return (
-      <div>
-          <AdsSlide />
-          <Widget />
-          <ShopCollection />
-          <Recommend />
-          <NewArrival />
-          <BestSeller />
+    <div>
+      <AdsSlide />
+      <Widget />
+      <ShopCollection />
+      <Recommend />
+      <NewArrival />
+      <BestSeller />
     </div>
   )
 }

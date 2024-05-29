@@ -25,7 +25,7 @@ function Header() {
 
   return (
     <>
-      <div className="text-text-secondary mb-3">
+      <div className="text-text-secondary mb-3 border-b-[2px] border-gray-100">
         <div className="flex justify-between items-center py-1 px-[3rem] bg-primary text-text">
           <div></div>
           <div><p>🔥 Only 11 days left until VALENTINE'S DAY! 🔥</p></div>

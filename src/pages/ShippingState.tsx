@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import CouponIcon from '../components/svg/Coupon';
+import GiftIcon from '../components/svg/Gift';
 
 
 const TableComponent: React.FC = () => {
@@ -56,14 +58,15 @@ const TabItem: React.FC<TabItemProps> = ({ tabNumber, activeTab, onClick, label 
 
 // FormField Component
 interface FormFieldProps {
-  label: string;
+  placeholder?: string;
+  label?: string;
   type?: string;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ label, type = "text" }) => (
+const FormField: React.FC<FormFieldProps> = ({ placeholder, label, type = "text" }) => (
   <div className="flex items-start justify-between gap-4">
-    <div className="text-sm text-secondary">{label}</div>
-    <input className="w-[400px] border-[1px] h-[40px] border-border text-primary px-2 text-sm focus:outline-none" type={type} />
+    {label && <div className="text-sm text-secondary">{label}</div>}
+    <input className="w-[400px] border-[1px] h-[40px] border-border text-primary px-2 text-sm focus:outline-none " placeholder={placeholder} type={type} />
   </div>
 );
 
@@ -78,14 +81,16 @@ const FormFieldNoLabel: React.FC<FormFieldNoLabelProps> = ({ type = "text" }) =>
 
 // FormSelect Component
 interface FormSelectProps {
-  label: string;
+  question?: string;
+  label?: string;
   options: string[];
 }
 
-const FormSelect: React.FC<FormSelectProps> = ({ label, options }) => (
+const FormSelect: React.FC<FormSelectProps> = ({ question, label, options }) => (
   <div className="flex items-start justify-between gap-4">
-    <div className="text-sm text-secondary">{label}</div>
+    {label && <div className="text-sm text-secondary">{label}</div>}
     <select className="w-[400px] border-[1px] h-[40px] border-border text-primary px-2 text-sm focus:outline-none">
+      <option value="" disabled selected>{question}</option>
       {options.map(option => (
         <option key={option} value={option}>{option}</option>
       ))}
@@ -100,6 +105,9 @@ const ShippingState: React.FC = () => {
   const handleTabClick = (tabNumber: number) => {
     setActiveTab(tabNumber);
   };
+
+  const urlImg1 = "https://i5.walmartimages.com/seo/Lancome-La-Vie-Est-Belle-Eau-de-Parfum-Perfume-for-Women-3-4-oz_58c64918-43bb-43de-b59b-57c03197d78f_2.75529471134cc5ca27ec0dd1d0fd3a57.jpeg"
+  const urlImg2 = "https://i5.walmartimages.com/seo/Ariana-Grande-Sweet-Like-Candy-Eau-de-Parfum-Perfume-for-Women-1-Oz_6e8a4fdb-601f-42e5-86b0-0ed64fb1412a.28b228882edbbd27cf7d851dad8ec0df.jpeg"
 
   return (
     <div className="px-[12rem]">
@@ -148,18 +156,59 @@ const ShippingState: React.FC = () => {
                 <div className="w-40 h-12 bg-primary font-bold text-white justify-center items-center flex text-sm">NEXT</div>
                 <div className="text-sm text-secondary">Back</div>
               </div>
-           
+
             </form>
             <div className="flex gap-2 items-center mt-6">
               <input type="checkbox" id="confirm" name="fav_language" value="HTML" />
               <label className='text-sm text-secondary' htmlFor="confirm">YES! I'd Like To Receive Order Updates And Special Offers Via Text From PerfumeShop.Com</label>
             </div>
           </div>
-          <div className='w-full'>
-            <div className='w-full p-6 bg-gray-100'>a</div>
-            
+          <div >
+
+            <div className='p-6 bg-gray-100'>
+              <div className='flex items-center gap-4 text-sm font-bold mb-6'><GiftIcon /> Gift Message - Free! (Optional)</div>
+              <div className='flex flex-col gap-4'>
+                <FormSelect question="Select Occasion" options={['Option 1', 'Option 2', 'Option 3']} />
+                <FormField placeholder="Your Brief Gift Message" />
+              </div>
+              <p className='text-xs text-gray-500 mt-3'>Up to 65 Characters</p>
+
+
+              <div className='flex items-center gap-4 text-sm font-bold mb-6 mt-6'><CouponIcon /> Coupon, Gift Certificate Or Gift Card:</div>
+              <FormField placeholder="Enter Your Coupon" />
+              <p className='text-xs text-gray-500 mt-3'>Up to 65 Characters</p>
+            </div>
+            <div className='p-6 bg-gray-100 '>
+              <p className='font-bold text-lg'>ORDER SUMMARY</p>
+              <p className="h-[1px] bg-[#E4E7E9] my-4"></p>
+              <div className='text-sm mb-2 text-secondary'>2 Item In Cart</div>
+              <section className='flex flex-col gap-4 '>
+                <div className='flex gap-12'>
+                  <img className='w-20 h-20' src={urlImg1} alt="" />
+                  <div className='flex flex-col gap-2 '>
+                    <p className=' w-32 text-[14px]'>D & G Light Blue By Dolce & Gabbana<span className='text-xs'> by</span>  <span className=' text-sm underline'>Dolce & Gabbana</span></p>
+                    <p className='text-xs'>Item# 120682</p>
+                    <p className='text-lg'>1x <span className='font-bold'>$59.24</span> <del>$78.99</del></p>
+              
+                  </div>
+              
+                </div>
+                <p className="h-[1px] bg-[#E4E7E9] my-2"></p>
+                <div className='flex gap-12'>
+                  <img className='w-20 h-20' src={urlImg2} alt="" />
+                  <div className='flex flex-col gap-2 '>
+                    <p className=' w-32 text-[14px]'>D & G Light Blue By Dolce & Gabbana<span className='text-xs'> by</span>  <span className=' text-sm underline'>Dolce & Gabbana</span></p>
+                    <p className='text-xs'>Item# 120682</p>
+                    <p className='text-lg'>1x <span className='font-bold'>$59.24</span> <del>$78.99</del></p>
+                  </div>
+                </div>
+                <p className='text-secondary text-sm'>Have Question? <span className='text-purple-700 underline'> Contact Us Here</span></p>
+              </section>
+     
+            </div>
+
           </div>
-        
+
         </div>
       )}
       {activeTab === 2 && <div></div>}
