@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -16,7 +18,7 @@ export const Breadcrumb: React.FC = () => {
         return null;
     }
 
-    pathnames.reduce((prevPath, currPath, index) => {
+    pathnames.reduce((prevPath, currPath) => {
         const path = `${prevPath}/${currPath}`;
         breadcrumbItems.push({
             label: currPath.charAt(0).toUpperCase() + currPath.slice(1), // Chữ cái đầu tiên viết hoa
