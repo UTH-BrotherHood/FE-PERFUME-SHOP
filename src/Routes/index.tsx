@@ -14,10 +14,10 @@ interface Route {
 
 const publicRoutes: Route[] = [
     {
-        path: "/homepage",
+        path: "/",
         component: HomePage,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
-    },    
+    },
     {
         path: "/couponpage",
         component: CouponPage,

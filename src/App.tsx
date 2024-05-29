@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./Routes";
 import MainLayout from "./layouts/MainLayout";
 import NotFound from "./pages/NotFound";
+import BlankLayout from "./layouts/BlankLayout";
 
 
 function App() {
@@ -27,10 +28,10 @@ function App() {
         <Route
           path="*"
           element={
-            <MainLayout>
+            <BlankLayout>
               {" "}
               <NotFound />{" "}
-            </MainLayout>
+            </BlankLayout>
           }
         />
       </Routes>
