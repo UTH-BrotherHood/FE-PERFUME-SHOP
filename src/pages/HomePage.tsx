@@ -7,7 +7,7 @@ import BestSeller from '../components/Home/BestSeller'
 
 function HomePage() {
   return (
-    <div>
+    <div >
       <AdsSlide />
       <Widget />
       <ShopCollection />
