@@ -1,4 +1,6 @@
+
 import React from 'react'
+
 
 const perfumes = [
   { name: "Women’s perfume", bgImage: "https://www.escentual.com/blog/wp-content/uploads/2022/12/What-is-the-most-iconic-perfume_-Iconic-female-fragrances.jpg" },
@@ -15,6 +17,7 @@ function ShopCollection() {
 
   return (  
     <div className="space-y-4  flex flex-col items-center gap-8">
+    
       <div>
       
 
