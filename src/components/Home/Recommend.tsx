@@ -78,11 +78,11 @@ function CustomArrows() {
   return (
     <>
 
-     
 
-        <p className="font-bold text-3xl uppercase text-center my-12">Recommended for you</p>
 
-     
+      <p className="font-bold text-3xl uppercase text-center my-12">Recommended for you</p>
+
+
       <div className="bg-background">
         <div className="w-4/5 m-auto">
 
@@ -112,7 +112,7 @@ function CustomArrows() {
       <div className='flex justify-center'>
         <div className='border-[1px] border-[#C4C4C4] w-40 h-[2.875rem] justify-center items-center flex mt-12 text-sm font-bold uppercase'>SHOP MORE</div>
       </div>
-     
+
     </>
   );
 }

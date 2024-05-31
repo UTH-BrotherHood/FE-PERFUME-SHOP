@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
 import HomePage from "../pages/HomePage";
+import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
 
 
@@ -31,6 +32,11 @@ const publicRoutes: Route[] = [
     {
         path: "/contact",
         component: ContactUs,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
+    {
+        path: "/product",
+        component: ProductPage,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
     },
 

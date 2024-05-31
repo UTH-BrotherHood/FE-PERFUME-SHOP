@@ -109,9 +109,7 @@ function NewArrival() {
           </div>
         </div>
       </div>
-      <div className='flex justify-center'>
-        <div className='border-[1px] border-[#C4C4C4] w-40 h-[2.875rem] justify-center items-center flex mt-12 text-sm font-bold uppercase'>SHOP MORE</div>
-      </div>
+  
 
     </>
   );

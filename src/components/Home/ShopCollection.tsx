@@ -15,11 +15,11 @@ function ShopCollection() {
   const firstRow = perfumes.slice(0, 3);
   const secondRow = perfumes.slice(3);
 
-  return (  
+  return (
     <div className="space-y-4  flex flex-col items-center gap-8">
-    
+
       <div>
-      
+
 
         <div className="flex flex-col items-center">
 
