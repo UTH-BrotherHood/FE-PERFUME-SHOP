@@ -70,8 +70,8 @@ interface Perfume {
 
 function ProductList() {
   return (
-      <div className='flex flex-col '>
-          <p>WONEN'S PERFUME</p>
+      <div className='flex flex-col text-center'>
+          <p className='font-bold'>WONEN'S PERFUME</p>
           <p>The Only Place To Shop The Latest Designer Perfumes At Discounts Up To 80% Off Department Store Prices. We <br/>
               Offer The Largest Selection Of The Latest Brand Name Perfumes And Discount Perfume Products, Shop And<br />
               Save On All Women's Perfume Today.</p>
