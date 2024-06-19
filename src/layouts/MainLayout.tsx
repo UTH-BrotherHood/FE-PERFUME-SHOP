@@ -7,7 +7,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         <>
             <Header />
             <Breadcrumb />
-            <div>{children}</div>
+            <div className="px-[15rem] ">{children}</div>
             <Footer />
         </>
     )

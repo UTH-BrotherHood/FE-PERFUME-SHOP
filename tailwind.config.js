@@ -12,8 +12,8 @@ export default {
         "primary": "#4D2952",
         "secondary": "#5F6C72",
         "border": "#C4C4C4",
-        "text": "#fff",
-        "text-secondary": "#383838",
+        "text": "#1F1F1F",
+        "text-secondary": "#CDCDCD",
 
 
        
