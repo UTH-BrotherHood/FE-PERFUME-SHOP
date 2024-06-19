@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import MainLayout from "../layouts/MainLayout";
 import AuthPage from "../pages/AuthPage";
+import CartPage from "../pages/CartPage";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
 import DetailPage from "../pages/DetailPage";
@@ -44,6 +45,11 @@ const publicRoutes: Route[] = [
     {
         path: "/detailpage",
         component: DetailPage,
+        layout: MainLayout,
+    },
+    {
+        path: "/cart",
+        component: CartPage,
         layout: MainLayout,
     },
     {

@@ -14,9 +14,6 @@ export default {
         "border": "#C4C4C4",
         "text": "#a5a5a5",
         "text-secondary": "#CDCDCD",
-
-
-       
       },
       fontFamily: {
         publicsan: ["Public Sans", "sans-serif"],
