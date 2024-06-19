@@ -3,9 +3,10 @@ import MainLayout from "../layouts/MainLayout";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
 import HomePage from "../pages/HomePage";
+import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
-
-
+import DetailPage from "../pages/DetailPage";
+import MyDashBoard from "../pages/MyDashBoard";
 interface Route {
     path: string;
     component: React.ComponentType<any>;
@@ -33,8 +34,21 @@ const publicRoutes: Route[] = [
         component: ContactUs,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
     },
-
-
+    {
+        path: "/product",
+        component: ProductPage,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
+    {
+        path: "/detailpage",
+        component: DetailPage,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
+    {
+        path: "/dashboard",
+        component: MyDashBoard,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
 ];
 const privateRoutes: Route[] = [];
 
