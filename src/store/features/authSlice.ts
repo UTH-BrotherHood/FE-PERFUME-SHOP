@@ -58,8 +58,6 @@ export const userRegister = createAsyncThunk(
         token: access_token,
       };
       return user;
-    } else {
-      throw new Error(response.message || "Registration failed");
     }
   },
 );
@@ -105,11 +103,11 @@ const authSlice = createSlice({
         state.status = "loading";
         state.error = null;
       })
-      .addCase(userRegister.fulfilled, (state, action: PayloadAction<User>) => {
-        state.status = "succeeded";
-        state.user = action.payload;
-        state.error = null;
-      })
+      // .addCase(userRegister.fulfilled, (state, action: PayloadAction<User>) => {
+      //   state.status = "succeeded";
+      //   state.user = action.payload;
+      //   state.error = null;
+      // })
       .addCase(userRegister.rejected, (state, action) => {
         state.status = "failed";
         const errorMessage = action.error.message ?? "Registration failed";

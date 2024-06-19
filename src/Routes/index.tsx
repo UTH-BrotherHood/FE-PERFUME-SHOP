@@ -6,7 +6,7 @@ import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
-import DetailPage from "../pages/DetailPage";
+import SignUpPage from "../pages/SignUpPage";
 
 interface Route {
     path: string;
@@ -43,6 +43,11 @@ const publicRoutes: Route[] = [
     {
         path: "/detailpage",
         component: DetailPage,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
+    {
+        path: "/sign-up",
+        component: SignUpPage,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
     },
 ];
