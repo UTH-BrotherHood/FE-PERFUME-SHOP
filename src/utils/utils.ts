@@ -33,7 +33,7 @@ export const handleErrorsApi = ({
       const item = error.errors![key]; 
       setError(item.path, {
         type: 'server',
-        message: item.msg + " con cac"
+        message: item.msg 
       });
     });
   } else {

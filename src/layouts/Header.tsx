@@ -1,11 +1,17 @@
-import { Link } from "react-router-dom"
-import SearchIcon from "../components/svg/SearchIcon"
-import Logo from "../components/svg/LogoIcon"
-import User from "../components/svg/UserIcon"
-import HeartIcon from "../components/svg/HeartIcon"
-import CartIcon from "../components/svg/CartIcon"
+import { Link } from "react-router-dom";
+import { useAppSelector } from "../store/store";
+import { selectCurrentUser, selectAccessToken } from "../store/features/authSlice";
+import SearchIcon from "../components/svg/SearchIcon";
+import Logo from "../components/svg/LogoIcon";
+import User from "../components/svg/UserIcon";
+import HeartIcon from "../components/svg/HeartIcon";
+import CartIcon from "../components/svg/CartIcon";
 
 function Header() {
+  const user = useAppSelector(selectCurrentUser); // Get the current user from Redux store
+  const accessToken = useAppSelector(selectAccessToken);
+  
+
   const navItems = [
     { path: "/Perfumes", label: "Perfumes" },
     { path: "/Brands", label: "Brands" },
@@ -25,8 +31,8 @@ function Header() {
 
   return (
     <>
-      <div className="text-text-secondary  border-b-[2px] border-gray-100">
-        <div className="flex justify-between items-center py-1 px-[3rem] bg-primary text-text">
+      <div className="text-text border-b-[2px] border-gray-100">
+        <div className="flex justify-between items-center py-1 px-[3rem] bg-primary text-white">
           <div></div>
           <div><p>🔥 Only 11 days left until VALENTINE'S DAY! 🔥</p></div>
           <div className="flex gap-[2rem]">
@@ -51,18 +57,23 @@ function Header() {
               <Logo />
             </Link>
           </div>
-          <div className="flex gap-[2rem]">
+          <div className="flex gap-[2rem]  text-[#515151]">
             {userLinks.map(link => (
               <Link key={link.label} to={link.path} className="flex justify-between items-center gap-2">
                 {link.icon}
                 {link.label}
               </Link>
             ))}
+            {user && (
+              <span className="text-5xl text-rose-600">
+                {user.username} {accessToken && <>({accessToken})</>}
+              </span>
+            )}
           </div>
         </div>
 
         <div>
-          <nav className="main-menu flex justify-center items-center py-3 px-[17rem] gap-[3rem]">
+          <nav className="main-menu flex text-[#515151] uppercase justify-center items-center py-3 px-[17rem] gap-[3rem]">
             {navItems.map(item => (
               <Link key={item.path} to={item.path}>{item.label}</Link>
             ))}
@@ -73,4 +84,4 @@ function Header() {
   )
 }
 
-export default Header
+export default Header;

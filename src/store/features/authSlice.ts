@@ -4,19 +4,21 @@ import { RootState } from "../store";
 
 interface User {
   id: string;
-  name: string;
+  username: string; // Updated field
   email: string;
-  token: string;
+  token: string | null;
 }
 
 interface AuthState {
   user: User | null;
+  accessToken: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
+  accessToken: null,
   status: "idle",
   error: null,
 };
@@ -25,11 +27,11 @@ export const userLogin = createAsyncThunk(
   "auth/userLogin",
   async (credentials: { email: string; password: string }) => {
     const response = await UserApi.LoginUser(credentials);
-    if (response.status === "OK") {
+    if (response.status === "200") {
       const { data, access_token } = response;
-      const user = {
+      const user: User = {
         id: data._id,
-        name: data.name,
+        username: data.username,
         email: data.email,
         token: access_token,
       };
@@ -51,14 +53,16 @@ export const userRegister = createAsyncThunk(
     const response = await UserApi.RegisterUser(credentials);
     if (response.status === "OK") {
       const { data, access_token } = response;
-      const user = {
+      const user: User = {
         id: data._id,
-        name: data.name,
+        username: data.username,
         email: data.email,
         token: access_token,
       };
       return user;
     }
+    // It's better to explicitly return something even if the response is not OK
+    return null;
   },
 );
 
@@ -68,6 +72,9 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+    },
+    setAccessToken: (state, action: PayloadAction<string | null>) => {
+      state.accessToken = action.payload;
     },
     clearError: (state) => {
       state.error = null;
@@ -82,6 +89,7 @@ const authSlice = createSlice({
       .addCase(userLogin.fulfilled, (state, action: PayloadAction<User>) => {
         state.status = "succeeded";
         state.user = action.payload;
+        state.accessToken = action.payload.token; // Assign token to accessToken
         state.error = null;
       })
       .addCase(userLogin.rejected, (state, action) => {
@@ -94,6 +102,7 @@ const authSlice = createSlice({
       .addCase(userLogout.fulfilled, (state) => {
         state.status = "succeeded";
         state.user = null;
+        state.accessToken = null; // Clear access token on logout
       })
       .addCase(userLogout.rejected, (state, action) => {
         state.status = "failed";
@@ -111,7 +120,7 @@ const authSlice = createSlice({
       .addCase(userRegister.rejected, (state, action) => {
         state.status = "failed";
         const errorMessage = action.error.message ?? "Registration failed";
-      
+
         // Handle specific error messages
         if (action.error.message && action.error.message.includes("Email already exists")) {
           state.error = "This email is already registered.";
@@ -127,7 +136,8 @@ const authSlice = createSlice({
 export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectAuthStatus = (state: RootState) => state.auth.status;
 export const selectAuthError = (state: RootState) => state.auth.error;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken; 
 
-export const { setUser, clearError } = authSlice.actions;
+export const { setUser, setAccessToken, clearError } = authSlice.actions;
 
 export default authSlice.reducer;

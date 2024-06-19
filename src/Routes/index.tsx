@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import MainLayout from "../layouts/MainLayout";
+import AuthPage from "../pages/AuthPage";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
-import SignUpPage from "../pages/SignUpPage";
+ // Updated import
 
 interface Route {
     path: string;
@@ -18,37 +19,42 @@ const publicRoutes: Route[] = [
     {
         path: "/",
         component: HomePage,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/couponpage",
         component: CouponPage,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/shipping-state",
         component: ShippingState,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/contact",
         component: ContactUs,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/product",
         component: ProductPage,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/detailpage",
         component: DetailPage,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        layout: MainLayout,
     },
     {
         path: "/sign-up",
-        component: SignUpPage,
-        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+        component: AuthPage,
+        layout: MainLayout,
+    },
+    {
+        path: "/sign-in",
+        component: AuthPage,
+        layout: MainLayout,
     },
 ];
 const privateRoutes: Route[] = [];
