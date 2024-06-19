@@ -1,161 +1,70 @@
-// import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { GetAllProducts, GetProductById } from "../../apis/ProductApi";
-// import { IProductData } from "../../types/product.type";
-// import { RootState } from "../store";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState, useAppSelector } from "../store";
+import { fetchProducts } from "../../apis/ProductApi"; // Import the API function to fetch products
+import { selectAccessToken } from "./authSlice";
 
-// interface FilterCriteria {
-//   page?: number;
-//   limit?: number;
-//   category?: string;
-//   categoryNames?: string;
-//   minPrice?: number | null;
-//   maxPrice?: number | null;
-//   brand?: string;
-//   brandName?: string;
-//   search?: string;
-//   sort?: string;
-// }
+interface Product {
+ id?: string;
+    category_id: string;
+    name: string;
+    description: string;
+    discount: number;
+    images: string[];
+    stock: number;
+    price: number;
+    created_at?: Date;
+    updated_at?: Date;
+  // Add other properties of a product
+}
 
-// export const fetchFilteredProducts = createAsyncThunk(
-//   "products/fetchFilteredProducts",
-//   async (filterCriteria: FilterCriteria) => {
-//     const response = await GetAllProducts({
-//       page: filterCriteria.page ?? 1,
-//       limit: filterCriteria.limit ?? 8,
-//       category: filterCriteria.category ?? "",
-//       minPrice: filterCriteria.minPrice ?? undefined,
-//       maxPrice: filterCriteria.maxPrice ?? undefined,
-//       brand: filterCriteria.brand ?? "",
-//       search: filterCriteria.search ?? "",
-//       sort: filterCriteria.sort ?? "",
-//     });
-//     return response;
-//   }
-// );
+interface ProductState {
+  products: Product[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
 
-// export const fetchProductDetails = createAsyncThunk(
-//   "products/fetchProductDetails",
-//   async (productId: string) => {
-//     const response = await GetProductById(productId);
-//     return response;
-//   }
-// );
+const initialState: ProductState = {
+  products: [],
+  status: "idle",
+  error: null,
+};
 
-// interface ProductState {
-//   products: IProductData[];
-//   productDetails: IProductData | null;
-//   status: "idle" | "loading" | "succeeded" | "failed";
-//   error: string | null;
-//   page: number;
-//   limit: number;
-//   total: number;
-//   filterCriteria: FilterCriteria;
-// }
 
-// const initialState: ProductState = {
-//   products: [],
-//   productDetails: null,
-//   status: "idle",
-//   error: null,
-//   page: 1,
-//   limit: 8,
-//   total: 0,
-//   filterCriteria: {
-//     minPrice: null,
-//     maxPrice: null,
-//     search: "",
-//     sort: "",
-//     brand: "",
-//   },
-// };
+// Async thunk to fetch products
+export const fetchProductsAsync = createAsyncThunk(
+  "products/fetchProducts",
+  async (accessToken: string | null) => {
+    if (!accessToken) {
+      throw new Error('Access token is null.');
+    }
+    const response = await fetchProducts(accessToken); 
+    return response.data; 
+  }
+);
 
-// const productSlice = createSlice({
-//   name: "products",
-//   initialState,
-//   reducers: {
-//     addProduct: (state, action: PayloadAction<IProductData>) => {
-//       state.products.push(action.payload);
-//     },
-//     updateFilterCriteria: (
-//       state,
-//       action: PayloadAction<Partial<FilterCriteria>>
-//     ) => {
-//       state.filterCriteria = { ...state.filterCriteria, ...action.payload };
-//     },
-//     resetPriceFilter: (state) => {
-//       state.filterCriteria.minPrice = null;
-//       state.filterCriteria.maxPrice = null;
-//     },
-//     setSearchKeyword: (state, action: PayloadAction<string>) => {
-//       state.filterCriteria.search = action.payload;
-//     },
-//     setSortOption: (state, action: PayloadAction<string>) => {
-//       state.filterCriteria.sort = action.payload;
-//     },
-//     setBrandFilter: (state) => {
-//       state.filterCriteria.brand = "";
-//       state.filterCriteria.brandName = "";
-//     },
-//     setBrandName: (state, action: PayloadAction<string>) => {
-//       state.filterCriteria.brandName = action.payload;
-//     },
-//     setCategoryNames: (state, action: PayloadAction<string>) => {
-//       state.filterCriteria.categoryNames = action.payload;
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchFilteredProducts.pending, (state) => {
-//         state.status = "loading";
-//         state.error = null;
-//       })
-//       .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
-//         state.status = "succeeded";
-//         state.products = action.payload.products ?? [];
-//         state.page = action.payload.page ?? state.page;
-//         state.limit = action.payload.limit ?? state.limit;
-//         state.total = action.payload.total ?? state.total;
-//         state.error = null;
-//       })
-//       .addCase(fetchFilteredProducts.rejected, (state, action) => {
-//         state.status = "failed";
-//         state.error = action.error.message ?? "Something went wrong";
-//       })
-//       .addCase(fetchProductDetails.pending, (state) => {
-//         state.status = "loading";
-//         state.error = null;
-//       })
-//       .addCase(fetchProductDetails.fulfilled, (state, action) => {
-//         state.status = "succeeded";
-//         state.productDetails = action.payload;
-//         state.error = null;
-//       })
-//       .addCase(fetchProductDetails.rejected, (state, action) => {
-//         state.status = "failed";
-//         state.error = action.error.message ?? "Something went wrong";
-//       });
-//   },
-// });
 
-// export const selectFilterCriteria = (state: RootState) =>
-//   state.products.filterCriteria;
+const productSlice = createSlice({
+  name: "products",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProductsAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProductsAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload;
+      })
+      .addCase(fetchProductsAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to fetch products";
+      });
+  },
+});
 
-// export const selectProductDetails = (state: RootState) =>
-//   state.products.productDetails;
+export const selectProducts = (state: RootState) => state.products.products;
+export const selectProductsStatus = (state: RootState) => state.products.status;
+export const selectProductsError = (state: RootState) => state.products.error;
 
-// export const selectProductStatus = (state: RootState) => state.products.status;
-
-// export const selectProductError = (state: RootState) => state.products.error;
-
-// export const {
-//   addProduct,
-//   updateFilterCriteria,
-//   resetPriceFilter,
-//   setSearchKeyword,
-//   setSortOption,
-//   setBrandFilter,
-//   setBrandName,
-//   setCategoryNames,
-// } = productSlice.actions;
-
-// export default productSlice.reducer;
+export default productSlice.reducer;

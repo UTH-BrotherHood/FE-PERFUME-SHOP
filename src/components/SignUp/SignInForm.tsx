@@ -9,13 +9,13 @@ import { handleErrorsApi } from "../../utils/utils";
 import http from "../../utils/http";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/store";
-import { userLogin, setUser, setAccessToken } from "../../store/features/authSlice"; // Assuming setUser is the action to set user data
+import { userLogin, setUser, setAccessToken } from "../../store/features/authSlice"; 
 
 export default function SignInForm() {
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
     const navigate = useNavigate();
-    const dispatch = useAppDispatch(); // Redux dispatch function
+    const dispatch = useAppDispatch(); 
 
     const form = useForm<SignInBodyType>({
         defaultValues: {
@@ -33,7 +33,7 @@ export default function SignInForm() {
             toast({
                 description: result.data.message,
             });
-            // Dispatch actions to save user data and access token into Redux
+          
             dispatch(setUser(result.data.result.userInfo));
             dispatch(setAccessToken(result.data.result.access_token));
             console.log(result.data.result);

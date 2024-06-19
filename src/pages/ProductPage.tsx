@@ -15,7 +15,7 @@ interface Perfume {
 const perfumes: Perfume[] = [
   { id: 1, name: "Armaf Passion", brand: "Armaf", price: 51.74, size: "large", gender: "female", image: "https://via.placeholder.com/150" },
   { id: 2, name: "Jo Malone Vetiver", brand: "Jo Malone", price: 75.00, size: "medium", gender: "female", image: "https://via.placeholder.com/150" },
-  // Add more sample data as needed
+
 ];
 
 function ProductPage() {
