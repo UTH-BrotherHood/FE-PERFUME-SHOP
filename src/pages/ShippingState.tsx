@@ -63,7 +63,7 @@ interface FormFieldProps {
   type?: string;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ placeholder, label, type = "text" }) => (
+export const FormField: React.FC<FormFieldProps> = ({ placeholder, label, type = "text" }) => (
   <div className="flex items-start justify-between gap-4">
     {label && <div className="text-sm text-secondary">{label}</div>}
     <input className="w-[400px] border-[1px] h-[40px] border-border text-primary px-2 text-sm focus:outline-none " placeholder={placeholder} type={type} />

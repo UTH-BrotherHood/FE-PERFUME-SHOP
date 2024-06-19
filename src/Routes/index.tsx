@@ -2,10 +2,11 @@
 import MainLayout from "../layouts/MainLayout";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
+import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
-import DetailPage from "../pages/DetailPage";
+import SignUpPage from "../pages/SignUpPage";
 
 interface Route {
     path: string;
@@ -44,7 +45,12 @@ const publicRoutes: Route[] = [
         component: DetailPage,
         layout: MainLayout, // khong co cung duoc , mac dinh la main layout
     },
+    {
+        path: "/sign-up",
+        component: SignUpPage ,
+        layout: MainLayout, // khong co cung duoc , mac dinh la main layout
+    },
 ];
 const privateRoutes: Route[] = [];
 
-export { publicRoutes, privateRoutes };
+export { privateRoutes, publicRoutes };

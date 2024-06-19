@@ -9,15 +9,15 @@ function SideBar() {
                 <div className="inline-flex items-center justify-center  gap-[0.38rem]  bg-[#F5F6F6] p-2 ">
                     <div className='text-xs font-semibold leading-5 uppercase'>CK ONE</div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M9.375 2.625L2.625 9.375" stroke="#929FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M9.375 9.375L2.625 2.625" stroke="#929FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.375 2.625L2.625 9.375" stroke="#929FA5" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9.375 9.375L2.625 2.625" stroke="#929FA5" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
                 <div className="inline-flex items-center gap-[0.38rem] justify-center    bg-[#F5F6F6] p-2 ">
                     <div className='text-xs font-semibold leading-5 uppercase'>75 ML</div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M9.375 2.625L2.625 9.375" stroke="#929FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M9.375 9.375L2.625 2.625" stroke="#929FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.375 2.625L2.625 9.375" stroke="#929FA5" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                        <path d="M9.375 9.375L2.625 2.625" stroke="#929FA5" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
             </div>
@@ -29,10 +29,10 @@ function SideBar() {
                     <Dropdown.Item>Earnings</Dropdown.Item>
                     <Dropdown.Item>Sign out</Dropdown.Item>
                 </Dropdown>
+            </div>
+
         </div>
-        
-        </div>
-   
+
 
 
 
