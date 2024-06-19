@@ -46,22 +46,24 @@ interface Product {
 
 ];
 function DetailPage() {
+    const imageUrl = "https://imgs.search.brave.com/6ldLo3qzP-uU2dU7yFRY7cUPXi2YFToFdkxXaSNxrrA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTAw/MjA2NTE3OC9waG90/by9ib3R0bGUtb2Yt/cGVyZnVtZS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Z2x3/NUhHMWVOTmVGVTY4/VVlyWDZoZUZyak9U/S2tUSE95NEpuTW5P/cXJ2bz0";
     return (
     <><div className="px-[12rem]">
             <div className="container mx-auto bg-white p-6 rounded-lg shadow-md">
                 <div className="text-center text-sm text-red-600">Sale ends in: <span className="font-bold">22 hrs 56 min 31 sec</span></div>
                 <InnerImageZoom
-                    src="https://imgs.search.brave.com/6ldLo3qzP-uU2dU7yFRY7cUPXi2YFToFdkxXaSNxrrA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTAw/MjA2NTE3OC9waG90/by9ib3R0bGUtb2Yt/cGVyZnVtZS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Z2x3/NUhHMWVOTmVGVTY4/VVlyWDZoZUZyak9U/S2tUSE95NEpuTW5P/cXJ2bz0"
-                    imgAlt="Gucci Bamboo Thumbnail"
+                    src={imageUrl}
+                    alt="Gucci Bamboo Thumbnail"
                     className="w-16 h-16 object-cover border-2 border-black mb-2" />
 
                 <div className="flex flex-col md:flex-row ">
                     <div className=" md:w-2/3 flex justify-center">
-                        <Zoom>
-                            <img src="https://imgs.search.brave.com/6ldLo3qzP-uU2dU7yFRY7cUPXi2YFToFdkxXaSNxrrA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTAw/MjA2NTE3OC9waG90/by9ib3R0bGUtb2Yt/cGVyZnVtZS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Z2x3/NUhHMWVOTmVGVTY4/VVlyWDZoZUZyak9U/S2tUSE95NEpuTW5P/cXJ2bz0"
-                                alt="Gucci Bamboo Thumbnail"
-                                className="w-128 h-128 object-cover" />
-                        </Zoom>
+                        <InnerImageZoom
+                                
+                                    src= {imageUrl}
+                                    alt= "Gucci Bamboo Thumbnail"
+                                    className= "w-128 h-128 object-cover"
+                                    />                 
 
                     </div>
                     <div className="md:w-1/2 md:ml-6 mt-6 md:mt-0 justify-center">
