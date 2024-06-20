@@ -1,8 +1,17 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import imgRecommend2 from '../../assets/imageHome/imgrecommed2.png';
 import { fetchProductsAsync, selectProducts, selectProductsStatus } from '../../store/features/productSlice';
 import { selectAccessToken } from '../../store/features/authSlice';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "../ui/pagination"
 
 interface Perfume {
     id?: string;
@@ -31,11 +40,13 @@ function ProductList() {
 
 
     return (
-        <div className='flex flex-col'>
-            <p className='font-bold text-3xl'>WOMEN'S PERFUME</p>
-            <p className='text-secondary text-sm'>The Only Place To Shop The Latest Designer Perfumes At Discounts Up To 80% Off Department Store Prices. We <br />
-                Offer The Largest Selection Of The Latest Brand Name Perfumes And Discount Perfume Products, Shop And<br />
-                Save On All Women's Perfume Today.</p>
+        <div className='flex flex-col w-[80%]'>
+            <div className='text-center'>
+                <p className='font-bold text-3xl'>WOMEN'S PERFUME</p>
+                <p className='text-secondary text-sm '>The Only Place To Shop The Latest Designer Perfumes At Discounts Up To 80% Off Department Store Prices. We <br />
+                    Offer The Largest Selection Of The Latest Brand Name Perfumes And Discount Perfume Products, Shop And<br />
+                    Save On All Women's Perfume Today.</p>
+            </div>
 
             <div className='grid grid-cols-4 gap-4'>
                 {products.map((d: Perfume) => (
@@ -48,12 +59,30 @@ function ProductList() {
                         </div>
                         <img className='w-56' src={imgRecommend2} alt="" />
                         <p className='text-sm font-bold uppercase text-center mt-[1.89rem]'>{d.name}</p>
-                        <p className='text-[0.812rem] underline text-center'>by Ipsa</p>
                         <p className='py-[0.812rem] text-sm text-center'>{d.description}</p>
                         <p className='text-[0.812rem] text-center'>from <span className='font-bold text-lg'>{`$${d.price}`}</span></p>
                         <div className='border-[1px] border-[#C4C4C4] w-full h-[2.875rem] justify-center items-center flex mt-4 text-sm font-bold uppercase'>ADD TO BAG</div>
                     </div>
                 ))}
+            </div>
+            <div>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious href="#" />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="#">1</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationNext href="#" />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+
             </div>
         </div>
     );

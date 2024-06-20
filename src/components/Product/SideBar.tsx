@@ -1,10 +1,17 @@
-import { Dropdown } from 'flowbite-react'
-import React from 'react'
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "../ui/accordion"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+
 
 function SideBar() {
     return (
 
-        <div>
+        <div className='w-[20%]'>
             <div className='grid gap-2 grid-cols-3'>
                 <div className="inline-flex items-center justify-center  gap-[0.38rem]  bg-[#F5F6F6] p-2 ">
                     <div className='text-xs font-semibold leading-5 uppercase'>CK ONE</div>
@@ -23,14 +30,50 @@ function SideBar() {
             </div>
             <div className='border-[1px] border-[#BE5B75] text-[#BE5B75] w-full h-[2.875rem] justify-center items-center flex mt-6 text-sm font-bold uppercase'>RESET ALL FILTERS</div>
             <div>
-                <Dropdown label="Small dropdown" size="sm">
-                    <Dropdown.Item>Dashboard</Dropdown.Item>
-                    <Dropdown.Item>Settings</Dropdown.Item>
-                    <Dropdown.Item>Earnings</Dropdown.Item>
-                    <Dropdown.Item>Sign out</Dropdown.Item>
-                </Dropdown>
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>FEATURED BRANDS</AccordionTrigger>
+                        <AccordionContent>
+                            Thang nguyenkenny vo code cho t
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger>PRICE RANGE</AccordionTrigger>
+                        <AccordionContent>
+                            Thang nguyenkenny vo code cho t
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-3">
+                        <AccordionTrigger>PARFUME SIZE</AccordionTrigger>
+                        <AccordionContent>
+                            Thang nguyenkenny vo code cho t
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-4">
+                        <AccordionTrigger>GENDER</AccordionTrigger>
+                        <AccordionContent>
+                            Thang nguyenkenny vo code cho t
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
-
+            <div className="flex flex-col  gap-3 w-full py-4 pt-4">
+                <p className="text-sm">LIST COUPON OURJOIN</p>
+                <Input placeholder="Email Address" className="w-full rounded-none" />
+                <Button type="submit" className="w-full h-[2.8rem] uppercase font-bold text-white rounded-sm">
+                    SIGN UP
+                </Button>
+            </div>
+            <div className="flex flex-col  gap-3 w-full py-4 pt-4">
+                <p className="text-sm">ABOUT WOMEN'S PERFUME</p>
+                <p className="text-xs">The Only Place To Shop The Latest Designer
+                    Perfumes At Discounts Up To 80% Off
+                    Department Store Prices. We Offer The
+                    Largest Selection Of The Latest Brand Name
+                    Perfumes And Discount Perfume Products.
+                    Shop And Save On All Women's Perfume
+                    Today.</p>
+            </div>
         </div>
 
 

@@ -1,6 +1,5 @@
 import SideBar from '../components/Product/SideBar'
 import ProductList from '../components/Product/ProductList'
-import React, { useState, FormEvent } from 'react';
 
 interface Perfume {
   id: number;
@@ -21,9 +20,8 @@ const perfumes: Perfume[] = [
 function ProductPage() {
 
   return (
-    <div className='flex justify-between'>
+    <div className='flex px-12 w-[100%] gap-4 justify-between'>
       <SideBar />
-
       <ProductList />
     </div>
   )

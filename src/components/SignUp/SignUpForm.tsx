@@ -26,7 +26,7 @@ export default function SignUpForm() {
     const form = useForm<RegisterBodyType>({
         defaultValues: {
             name: "Vuong",
-            email: "xuannvuongg+69@gmail.com",
+            email: "xuannvuongg+269@gmail.com",
             password: "String.123",
             confirm_password: "String.123",
             date_of_birth: "2004-04-24",
@@ -51,7 +51,7 @@ export default function SignUpForm() {
             });
         } finally {
             setLoading(false);
-          
+
         }
     }
 

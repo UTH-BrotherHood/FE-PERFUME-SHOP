@@ -38,7 +38,7 @@ interface FetchProductsParams {
 // Async thunk to fetch products
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchProducts",
-  async ({ accessToken, page = 1, limit = 4 }: FetchProductsParams) => {
+  async ({ accessToken, page = 1, limit = 8 }: FetchProductsParams) => {
     if (!accessToken) {
       throw new Error('Access token is null.');
     }
