@@ -29,16 +29,21 @@ const initialState: ProductState = {
   error: null,
 };
 
+interface FetchProductsParams {
+  accessToken: string | null;
+  page?: number;
+  limit?: number;
+}
 
 // Async thunk to fetch products
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchProducts",
-  async (accessToken: string | null) => {
+  async ({ accessToken, page = 1, limit = 4 }: FetchProductsParams) => {
     if (!accessToken) {
       throw new Error('Access token is null.');
     }
-    const response = await fetchProducts(accessToken); 
-    return response.data; 
+    const response = await fetchProducts({ token: accessToken, page, limit });
+    return response.products; 
   }
 );
 

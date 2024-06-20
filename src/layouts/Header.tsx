@@ -63,7 +63,9 @@ function Header() {
                 {link.icon}
                 {link.label}
               </Link>
+             
             ))}
+            <Link to='/product'>product</Link>
             {user && (
               <span className="text-5xl text-rose-600">
                 {user.username} {accessToken && <>({accessToken})</>}

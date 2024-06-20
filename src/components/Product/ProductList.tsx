@@ -24,22 +24,22 @@ function ProductList() {
     const accessToken = useAppSelector(selectAccessToken);
 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchProductsAsync(accessToken));
+        if (status === 'idle' && accessToken) {
+            dispatch(fetchProductsAsync({ accessToken, page: 1, limit: 4 }));
         }
-    }, [status, dispatch, accessToken]);
+    }, [status, accessToken, dispatch]);
 
 
     return (
-        <div className='flex flex-col '>
-            <p>WOMEN'S PERFUME</p>
-            <p>The Only Place To Shop The Latest Designer Perfumes At Discounts Up To 80% Off Department Store Prices. We <br />
+        <div className='flex flex-col'>
+            <p className='font-bold text-3xl'>WOMEN'S PERFUME</p>
+            <p className='text-secondary text-sm'>The Only Place To Shop The Latest Designer Perfumes At Discounts Up To 80% Off Department Store Prices. We <br />
                 Offer The Largest Selection Of The Latest Brand Name Perfumes And Discount Perfume Products, Shop And<br />
                 Save On All Women's Perfume Today.</p>
 
             <div className='grid grid-cols-4 gap-4'>
                 {products.map((d: Perfume) => (
-                    <div key={d.id} className=' h-[30rem]  py-[0.7rem] px-[1.3rem] items-center inline-flex flex-col justify-center '>
+                    <div key={d.id} className='h-[30rem] py-[0.7rem] px-[1.3rem] items-center inline-flex flex-col justify-center'>
                         <div className='w-full flex justify-between mb-2'>
                             <div className='flex items-center justify-center bg-primary text-white w-[3.3rem] h-5 font-extrabold text-[0.525rem]'>WOMEN</div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="16" viewBox="0 0 19 16" fill="none">
@@ -56,7 +56,7 @@ function ProductList() {
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default ProductList;
