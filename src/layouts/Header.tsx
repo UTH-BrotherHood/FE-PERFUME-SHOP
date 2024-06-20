@@ -24,9 +24,24 @@ function Header() {
   ];
 
   const userLinks = [
-    { path: "/MyAccount", label: "My Account", icon: <User /> },
-    { path: "/MyAccount", label: "Wishlist", icon: <HeartIcon /> },
-    { path: "/MyAccount", label: "My Items", icon: <CartIcon /> }
+    {
+      path: "/MyAccount",
+      label: user ? (
+        <span className=" ">
+        hello  {user.username}
+        </span>
+      ) : "My Account",
+      icon: <User />
+    },
+    {
+      path: "/product",
+      label: "Product",
+      icon: <HeartIcon />
+    },
+    {
+      path: "/dashboard",
+      label: "DashBoard"
+    }
   ];
 
   return (
@@ -65,12 +80,8 @@ function Header() {
               </Link>
              
             ))}
-            <Link to='/product'>product</Link>
-            {user && (
-              <span className="text-5xl text-rose-600">
-                {user.username} {accessToken && <>({accessToken})</>}
-              </span>
-            )}
+          
+           
           </div>
         </div>
 

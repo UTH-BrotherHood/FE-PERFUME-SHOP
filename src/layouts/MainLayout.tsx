@@ -6,7 +6,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <Header />
-            <Breadcrumb />
+            <div className="mt-6">   <Breadcrumb /></div>
+         
             <div >{children}</div>
             <Footer />
         </>

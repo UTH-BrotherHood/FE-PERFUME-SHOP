@@ -1,17 +1,9 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import imgRecommend2 from '../../assets/imageHome/imgrecommed2.png';
-import { fetchProductsAsync, selectProducts, selectProductsStatus } from '../../store/features/productSlice';
-import { selectAccessToken } from '../../store/features/authSlice';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../ui/pagination"
+import { fetchProductsAsync, selectProducts, selectTotalPages } from '../../store/features/productSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import Pagination from '../common/Pagination';
 
 interface Perfume {
     id?: string;
@@ -28,16 +20,21 @@ interface Perfume {
 
 function ProductList() {
     const products = useAppSelector(selectProducts);
-    const status = useAppSelector(selectProductsStatus);
+    const totalPages = useAppSelector(selectTotalPages);
     const dispatch = useAppDispatch();
-    const accessToken = useAppSelector(selectAccessToken);
+
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        if (status === 'idle' && accessToken) {
-            dispatch(fetchProductsAsync({ accessToken, page: 1, limit: 4 }));
-        }
-    }, [status, accessToken, dispatch]);
 
+        dispatch(fetchProductsAsync({ page: currentPage, limit: 4}));
+
+    }, [currentPage, dispatch]);
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+    };
 
     return (
         <div className='flex flex-col w-[80%]'>
@@ -58,7 +55,7 @@ function ProductList() {
                             </svg>
                         </div>
                         <img className='w-56' src={imgRecommend2} alt="" />
-                        <p className='text-sm font-bold uppercase text-center mt-[1.89rem]'>{d.name}</p>
+                        <Link to={`/product/${d.id}`} className='text-sm font-bold uppercase text-center mt-[1.89rem]'>{d.name}</Link>
                         <p className='py-[0.812rem] text-sm text-center'>{d.description}</p>
                         <p className='text-[0.812rem] text-center'>from <span className='font-bold text-lg'>{`$${d.price}`}</span></p>
                         <div className='border-[1px] border-[#C4C4C4] w-full h-[2.875rem] justify-center items-center flex mt-4 text-sm font-bold uppercase'>ADD TO BAG</div>
@@ -66,23 +63,7 @@ function ProductList() {
                 ))}
             </div>
             <div>
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">1</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext href="#" />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
-
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
         </div>
     );

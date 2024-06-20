@@ -1,16 +1,29 @@
-import { PaginationParams } from "../types/paginationParams.type";
 import http from "../utils/http";
 
-export const GetAllCategories = async ({
-  page = 0,
-  limit = 0,
-}: PaginationParams): Promise<any> => {
+interface FetchCategoryOptions {
+  id?: string;
+  name?: string;
+  description?: string;
+}
+
+export const fetchCategory = async (
+  options: FetchCategoryOptions,
+  token: string
+) => {
   try {
-    const response = await http.get(
-      `/categories/getall?limit=${limit}&page=${page}`,
-    );
-    return response.data;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        ...options
+      }
+    };
+
+    const response = await http.get("/categories", config);
+    return response.data.results;
   } catch (error) {
-    throw new Error("Failed to fetch categories");
+    console.error("Error fetching categories:", error);
+    throw error;
   }
 };
