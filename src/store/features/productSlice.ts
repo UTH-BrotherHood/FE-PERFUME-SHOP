@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { fetchProducts } from "../../apis/ProductApi"; // Import the API function to fetch products
-import { selectAccessToken } from "./authSlice";
+import { fetchProducts, fetchProductDetails } from "../../apis/ProductApi"; // Import the API function to fetch product details
 
 interface Product {
+  result: Product,
   id?: string;
   category_id: string;
   name: string;
@@ -19,6 +19,7 @@ interface Product {
 
 interface ProductState {
   products: Product[];
+  productDetails: Product | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   currentPage: number;
@@ -27,6 +28,7 @@ interface ProductState {
 
 const initialState: ProductState = {
   products: [],
+  productDetails: null,
   status: "idle",
   error: null,
   currentPage: 1, // Initial current page
@@ -34,7 +36,6 @@ const initialState: ProductState = {
 };
 
 interface FetchProductsParams {
-
   page?: number;
   limit?: number;
 }
@@ -42,10 +43,18 @@ interface FetchProductsParams {
 // Async thunk to fetch products
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchProducts",
-  async ({  page = 1, limit = 8 }: FetchProductsParams) => {
-   
-    const response = await fetchProducts({page, limit });
+  async ({ page = 1, limit = 8 }: FetchProductsParams) => {
+    const response = await fetchProducts({ page, limit });
     return response; // Return the whole response object including total pages
+  }
+);
+
+// Async thunk to fetch product details
+export const fetchProductDetailsAsync = createAsyncThunk(
+  "products/fetchProductDetails",
+  async (productId: string) => {
+    const response = await fetchProductDetails(productId);
+    return response; // Return the product details
   }
 );
 
@@ -61,16 +70,29 @@ const productSlice = createSlice({
       .addCase(fetchProductsAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.products = action.payload.products;
-        state.totalPages = action.payload.total_pages; // Update total pages from the response
+        state.totalPages = action.payload.total_pages;
       })
       .addCase(fetchProductsAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Failed to fetch products";
+      })
+      .addCase(fetchProductDetailsAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProductDetailsAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.productDetails = action.payload; 
+      })
+      .addCase(fetchProductDetailsAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to fetch product details";
       });
   },
 });
 
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectProductDetails = (state: RootState) =>
+  state.products.productDetails?.result ?? null;
 export const selectProductsStatus = (state: RootState) => state.products.status;
 export const selectProductsError = (state: RootState) => state.products.error;
 export const selectCurrentPage = (state: RootState) => state.products.currentPage;

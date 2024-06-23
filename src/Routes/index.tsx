@@ -46,7 +46,7 @@ const publicRoutes: Route[] = [
         layout: MainLayout,
     },
     {
-        path: "/product/:id",
+        path: "/product/:productId",
         component: DetailPage,
         layout: MainLayout,
     },

@@ -1,16 +1,25 @@
+// Header.tsx
+
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../store/store";
-import { selectCurrentUser, selectAccessToken } from "../store/features/authSlice";
+import { useAppSelector, useAppDispatch } from "../store/store";
+import { selectCurrentUser, setUser } from "../store/features/authSlice";
 import SearchIcon from "../components/svg/SearchIcon";
 import Logo from "../components/svg/LogoIcon";
 import User from "../components/svg/UserIcon";
 import HeartIcon from "../components/svg/HeartIcon";
 import CartIcon from "../components/svg/CartIcon";
 
-function Header() {
-  const user = useAppSelector(selectCurrentUser); // Get the current user from Redux store
-  const accessToken = useAppSelector(selectAccessToken);
-  
+const Header: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+    if (storedUser) {
+      dispatch(setUser(storedUser));
+    }
+  }, [dispatch]);
 
   const navItems = [
     { path: "/Perfumes", label: "Perfumes" },
@@ -28,7 +37,7 @@ function Header() {
       path: "/MyAccount",
       label: user ? (
         <span className=" ">
-        hello  {user.username}
+          hello {user.username}
         </span>
       ) : "My Account",
       icon: <User />
@@ -74,14 +83,11 @@ function Header() {
           </div>
           <div className="flex gap-[2rem]  text-[#515151]">
             {userLinks.map(link => (
-              <Link key={link.label} to={link.path} className="flex justify-between items-center gap-2">
+              <Link key={link.label as string} to={link.path} className="flex justify-between items-center gap-2">
                 {link.icon}
                 {link.label}
               </Link>
-             
             ))}
-          
-           
           </div>
         </div>
 
@@ -98,3 +104,4 @@ function Header() {
 }
 
 export default Header;
+

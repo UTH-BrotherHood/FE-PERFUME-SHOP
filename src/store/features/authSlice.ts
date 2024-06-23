@@ -1,10 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+// authSlice.ts
+
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import * as UserApi from "../../apis/UserApi";
 import { RootState } from "../store";
 
 interface User {
   id: string;
-  username: string; // Updated field
+  username: string;
   email: string;
   token: string | null;
 }
@@ -16,9 +18,12 @@ interface AuthState {
   error: string | null;
 }
 
+// Retrieve token from localStorage if available
+const initialAccessToken = localStorage.getItem("accessToken");
+
 const initialState: AuthState = {
   user: null,
-  accessToken: null,
+  accessToken: initialAccessToken,
   status: "idle",
   error: null,
 };
@@ -61,7 +66,6 @@ export const userRegister = createAsyncThunk(
       };
       return user;
     }
-    // It's better to explicitly return something even if the response is not OK
     return null;
   },
 );
@@ -72,9 +76,17 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+      // Update localStorage
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
     setAccessToken: (state, action: PayloadAction<string | null>) => {
       state.accessToken = action.payload;
+      // Update localStorage
+      if (action.payload) {
+        localStorage.setItem("accessToken", action.payload);
+      } else {
+        localStorage.removeItem("accessToken");
+      }
     },
     clearError: (state) => {
       state.error = null;
@@ -89,8 +101,11 @@ const authSlice = createSlice({
       .addCase(userLogin.fulfilled, (state, action: PayloadAction<User>) => {
         state.status = "succeeded";
         state.user = action.payload;
-        state.accessToken = action.payload.token; // Assign token to accessToken
+        state.accessToken = action.payload.token;
         state.error = null;
+        // Update localStorage
+        localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("accessToken", action.payload.token as string);
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.status = "failed";
@@ -102,7 +117,10 @@ const authSlice = createSlice({
       .addCase(userLogout.fulfilled, (state) => {
         state.status = "succeeded";
         state.user = null;
-        state.accessToken = null; // Clear access token on logout
+        state.accessToken = null;
+        // Clear localStorage
+        localStorage.removeItem("user");
+        localStorage.removeItem("accessToken");
       })
       .addCase(userLogout.rejected, (state, action) => {
         state.status = "failed";
@@ -112,23 +130,9 @@ const authSlice = createSlice({
         state.status = "loading";
         state.error = null;
       })
-      // .addCase(userRegister.fulfilled, (state, action: PayloadAction<User>) => {
-      //   state.status = "succeeded";
-      //   state.user = action.payload;
-      //   state.error = null;
-      // })
       .addCase(userRegister.rejected, (state, action) => {
         state.status = "failed";
-        const errorMessage = action.error.message ?? "Registration failed";
-
-        // Handle specific error messages
-        if (action.error.message && action.error.message.includes("Email already exists")) {
-          state.error = "This email is already registered.";
-        } else if (action.error.message && action.error.message.includes("Invalid value")) {
-          state.error = "Invalid value provided.";
-        } else {
-          state.error = errorMessage;
-        }
+        state.error = action.error.message ?? "Registration failed";
       });
   },
 });
@@ -136,7 +140,7 @@ const authSlice = createSlice({
 export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectAuthStatus = (state: RootState) => state.auth.status;
 export const selectAuthError = (state: RootState) => state.auth.error;
-export const selectAccessToken = (state: RootState) => state.auth.accessToken; 
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 
 export const { setUser, setAccessToken, clearError } = authSlice.actions;
 

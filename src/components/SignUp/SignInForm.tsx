@@ -6,10 +6,10 @@ import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import { SignInBodyType } from "../../schemaValidations/auth.schema";
 import { handleErrorsApi } from "../../utils/utils";
-import http from "../../utils/http";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/store";
 import { userLogin, setUser, setAccessToken } from "../../store/features/authSlice";
+import http from '../../utils/http';
 
 export default function SignInForm() {
     const [loading, setLoading] = useState(false);
@@ -34,8 +34,16 @@ export default function SignInForm() {
                 description: result.data.message,
             });
 
-            dispatch(setUser(result.data.result.userInfo));
-            dispatch(setAccessToken(result.data.result.access_token));
+            const user = result.data.result.userInfo;
+            const token = result.data.result.access_token;
+
+            // Save user and token to redux state
+            dispatch(setUser(user));
+            dispatch(setAccessToken(token));
+
+            // Save token to localStorage
+            localStorage.setItem("accessToken", token);
+
             console.log(result.data.result);
             navigate('/');
         } catch (error: any) {

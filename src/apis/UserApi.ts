@@ -6,7 +6,7 @@ import {
 import http from "../utils/http";
 
 export const LoginUser = async (data: UserLoginPayloadType) => {
-  const response = await http.post("/users/sign-in", data);
+  const response = await http.post("/users/login", data);
 
   return response.data;
 };
