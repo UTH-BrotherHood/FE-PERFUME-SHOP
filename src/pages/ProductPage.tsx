@@ -1,18 +1,49 @@
-import SideBar from '../components/Product/SideBar'
-import ProductList from '../components/Product/ProductList'
+import { useEffect, useState } from 'react';
+import SideBar from '../components/Product/SideBar';
+import ProductList from '../components/Product/ProductList';
+import { useAppDispatch } from '../store/store';
+import { fetchCategoriesAsync } from '../store/features/categoriesSlice';
 
 
 
 
+const ProductsPage: React.FC = () => {
 
-function ProductPage() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCategoriesAsync());
+  }, [dispatch]);
+
+  const [brandFilter, setBrandFilter] = useState<string[]>([]);
+  const [priceRangeFilter, setPriceRangeFilter] = useState<[number, number] | null>(null);
+  const [sizeFilter, setSizeFilter] = useState<string[]>([]);
+  const [genderFilter, setGenderFilter] = useState<string[]>([]);
+
+  const resetFilters = () => {
+    setBrandFilter([]);
+    setPriceRangeFilter(null);
+    setSizeFilter([]);
+    setGenderFilter([]);
+  };
 
   return (
-    <div className='flex px-12 w-[100%] gap-4 py-8 justify-between'>
-      <SideBar />
-      <ProductList />
+    <div className='flex'>
+      <SideBar
+        setBrandFilter={setBrandFilter}
+        setPriceRangeFilter={setPriceRangeFilter}
+        setSizeFilter={setSizeFilter}
+        setGenderFilter={setGenderFilter}
+        resetFilters={resetFilters}
+      />
+      <ProductList
+        brandFilter={brandFilter}
+        priceRangeFilter={priceRangeFilter}
+        sizeFilter={sizeFilter}
+        genderFilter={genderFilter}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ProductPage
+export default ProductsPage;

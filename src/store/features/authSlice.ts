@@ -12,6 +12,7 @@ interface User {
 }
 
 interface AuthState {
+  token: any;
   user: User | null;
   accessToken: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
