@@ -1,4 +1,4 @@
-// authSlice.ts
+
 
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import * as UserApi from "../../apis/UserApi";
@@ -9,7 +9,7 @@ interface User {
   username: string;
   email: string;
   token: string | null;
-  cart: any[]; // Define your actual structure for cart items
+  cart: any[];
   wishlist: any[]; 
   total_cart_quantity: number;
   total_wishlist_quantity: number;
@@ -22,7 +22,7 @@ interface AuthState {
   error: string | null;
 }
 
-// Retrieve token from localStorage if available
+
 const initialAccessToken = localStorage.getItem("accessToken");
 
 const initialState: AuthState = {
@@ -32,7 +32,7 @@ const initialState: AuthState = {
   error: null,
 };
 
-// Async thunk to login user
+
 export const userLogin = createAsyncThunk(
   "auth/userLogin",
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
@@ -60,7 +60,7 @@ export const userLogin = createAsyncThunk(
   }
 );
 
-// Async thunk to logout user
+
 export const userLogout = createAsyncThunk(
   "auth/userLogout",
   async (_, { rejectWithValue }) => {
@@ -73,7 +73,7 @@ export const userLogout = createAsyncThunk(
   }
 );
 
-// Async thunk to register user
+
 export const userRegister = createAsyncThunk(
   "auth/userRegister",
   async (
@@ -110,19 +110,19 @@ export const userRegister = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch user details
+
 export const fetchUserDetails = createAsyncThunk(
   "auth/fetchUserDetails",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await UserApi.getUserDetails(); // Define your getUserDetails function in UserApi
+      const response = await UserApi.getUserDetails(); 
       if (response.status === "OK") {
         const { data } = response;
         const user: User = {
           id: data._id,
           username: data.username,
           email: data.email,
-          token: data.access_token, // Ensure this matches your API response structure
+          token: data.access_token, 
           cart: data.cart,
           wishlist: data.wishlist,
           total_wishlist_quantity: data.wishlist.length,
@@ -147,7 +147,7 @@ const authSlice = createSlice({
     },
     setAccessToken: (state, action: PayloadAction<string | null>) => {
       state.accessToken = action.payload;
-      // Update localStorage
+ 
       if (action.payload) {
         localStorage.setItem("accessToken", action.payload);
       } else {
@@ -169,7 +169,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.accessToken = action.payload.token;
         state.error = null;
-        // Update localStorage
+       
         localStorage.setItem("user", JSON.stringify(action.payload));
         localStorage.setItem("accessToken", action.payload.token as string);
       })
@@ -184,7 +184,7 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.user = null;
         state.accessToken = null;
-        // Clear localStorage
+      
         localStorage.removeItem("user");
         localStorage.removeItem("accessToken");
       })
@@ -218,7 +218,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.accessToken = action.payload.token;
         state.error = null;
-        // Update localStorage
+       
         localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {

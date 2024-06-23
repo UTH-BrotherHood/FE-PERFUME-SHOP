@@ -40,6 +40,6 @@ export const getUserDetails = async () => {
         Authorization: `Bearer ${token}`
       }
     };
-  const response = await http.get("/users/me", config); // Adjust endpoint as per your backend API
+  const response = await http.get("/users/me", config);
   return response.data.result;
 };

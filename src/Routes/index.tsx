@@ -9,7 +9,6 @@ import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
-// Updated import
 
 interface Route {
     path: string;

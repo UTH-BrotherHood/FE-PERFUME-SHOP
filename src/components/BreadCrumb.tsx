@@ -13,7 +13,7 @@ export const Breadcrumb: React.FC = () => {
     const pathnames = pathname.split('/').filter((x) => x);
     let breadcrumbItems: BreadcrumbItem[] = [];
 
-    // Kiểm tra nếu đang ở trang Home thì không render breadcrumb
+    
     if (pathnames.length === 0) {
         return null;
     }
@@ -22,7 +22,7 @@ export const Breadcrumb: React.FC = () => {
         const path = `${prevPath}/${currPath}`;
         breadcrumbItems.push({
             label: currPath.charAt(0).toUpperCase() + currPath.slice(1), // Chữ cái đầu tiên viết hoa
-            link: path === "" ? "/" : path // Đường dẫn
+            link: path === "" ? "/" : path 
         });
         return path;
     }, "");

@@ -31,7 +31,7 @@ const TableComponent: React.FC = () => {
   );
 };
 
-// TabItem Component
+
 interface TabItemProps {
   tabNumber: number;
   activeTab: number;
@@ -56,7 +56,7 @@ const TabItem: React.FC<TabItemProps> = ({ tabNumber, activeTab, onClick, label 
   );
 };
 
-// FormField Component
+
 interface FormFieldProps {
   placeholder?: string;
   label?: string;
@@ -70,7 +70,6 @@ export const FormField: React.FC<FormFieldProps> = ({ placeholder, label, type =
   </div>
 );
 
-// FormFieldNoLabel Component
 interface FormFieldNoLabelProps {
   type?: string;
 }
@@ -79,7 +78,6 @@ const FormFieldNoLabel: React.FC<FormFieldNoLabelProps> = ({ type = "text" }) =>
   <input className="w-[400px] border-[1px] h-[40px] border-border text-primary px-2 text-sm focus:outline-none" type={type} />
 );
 
-// FormSelect Component
 interface FormSelectProps {
   question?: string;
   label?: string;
@@ -98,7 +96,7 @@ const FormSelect: React.FC<FormSelectProps> = ({ question, label, options }) => 
   </div>
 );
 
-// Main Component
+
 const ShippingState: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
 

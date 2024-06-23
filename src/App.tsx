@@ -17,7 +17,7 @@ function App() {
       }, 5000); 
     }
 
-    return () => clearTimeout(timer); // Hủy bỏ timer nếu component bị unmount hoặc state thay đổi
+    return () => clearTimeout(timer); 
   }, [showLoginPrompt]);
 
   return (
@@ -54,7 +54,7 @@ function App() {
                   <Navigate
                     to="/"
                     replace={true}
-                    state={{ showLoginPrompt: true }} // Truyền state để hiển thị thông báo
+                    state={{ showLoginPrompt: true }} 
                   />
                 )
               }

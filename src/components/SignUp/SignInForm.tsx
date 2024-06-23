@@ -37,11 +37,11 @@ export default function SignInForm() {
             const user = result.data.result.userInfo;
             const token = result.data.result.access_token;
 
-            // Save user and token to redux state
+          
             dispatch(setUser(user));
             dispatch(setAccessToken(token));
 
-            // Save token to localStorage
+         
             localStorage.setItem("accessToken", token);
 
             console.log(result.data.result);

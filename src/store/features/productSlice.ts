@@ -14,7 +14,7 @@ interface Product {
   price: number;
   created_at?: Date;
   updated_at?: Date;
-  // Add other properties of a product
+ 
 }
 
 interface ProductState {
@@ -31,8 +31,8 @@ const initialState: ProductState = {
   productDetails: null,
   status: "idle",
   error: null,
-  currentPage: 1, // Initial current page
-  totalPages: 1, // Initial total pages
+  currentPage: 1, 
+  totalPages: 1, 
 };
 
 interface FetchProductsParams {
@@ -40,21 +40,21 @@ interface FetchProductsParams {
   limit?: number;
 }
 
-// Async thunk to fetch products
+
 export const fetchProductsAsync = createAsyncThunk(
   "products/fetchProducts",
   async ({ page = 1, limit = 8 }: FetchProductsParams) => {
     const response = await fetchProducts({ page, limit });
-    return response; // Return the whole response object including total pages
+    return response; 
   }
 );
 
-// Async thunk to fetch product details
+
 export const fetchProductDetailsAsync = createAsyncThunk(
   "products/fetchProductDetails",
   async (productId: string) => {
     const response = await fetchProductDetails(productId);
-    return response; // Return the product details
+    return response; 
   }
 );
 

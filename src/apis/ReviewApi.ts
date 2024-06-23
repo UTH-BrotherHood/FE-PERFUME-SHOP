@@ -1,6 +1,6 @@
 import http from "../utils/http";
 
-const idUser = "6610df3cd0ebd1b2bd1f7c6d"; // ID người dùng cứng
+const idUser = "6610df3cd0ebd1b2bd1f7c6d";
 
 interface ReviewResponse {
   data: any;

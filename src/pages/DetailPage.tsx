@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { addToCart, addToWishlist } from "../apis/cartApi";
 import { getUserDetails } from "../apis/UserApi";
 import { setUser } from "../store/features/authSlice";
-// Ensure the correct path
+
 
 interface Product {
     id: number;
@@ -63,7 +63,7 @@ function DetailPage() {
 
           
 
-            // Save user info and token to Redux store
+         
             dispatch(setUser(userDetails));
 
         } catch (error) {
@@ -80,7 +80,7 @@ function DetailPage() {
 
 
 
-            // Save user info and token to Redux store
+           
             dispatch(setUser(userDetails));
 
         } catch (error) {

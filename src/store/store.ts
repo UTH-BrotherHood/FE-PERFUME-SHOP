@@ -1,12 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import productSlice from "./features/productSlice"; // Import the product slice
-import authSlice from "./features/authSlice";
-import categorySlice from './features/categoriesSlice'; // Import the auth slice
+import productSlice from "./features/productSlice"; 
+import categorySlice from './features/categoriesSlice'; 
 
 export const store = configureStore({
   reducer: {
-    products: productSlice, // Include the product slice in the store
+    products: productSlice, 
     auth: authSlice,
      categories: categorySlice,
     
