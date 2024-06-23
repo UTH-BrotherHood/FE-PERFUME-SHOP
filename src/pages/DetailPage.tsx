@@ -1,15 +1,16 @@
-import { MdZoomOutMap } from "react-icons/md";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import InnerImageZoom from "react-inner-image-zoom";
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import 'react-medium-image-zoom/dist/styles.css';
-import { Link, useParams } from "react-router-dom";
 import FBIcon from "../components/DetailPage/FBIcon";
 import InsIcon from "../components/DetailPage/InsIcon";
 import PinterestIcon from "../components/DetailPage/PinterestIcon";
 import TwitterIcon from "../components/DetailPage/TwitterIcon";
-import { useEffect, useState } from "react";
 import { fetchProductDetailsAsync, selectProductDetails } from "../store/features/productSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { addToCart, addToWishlist } from "../apis/cartApi";
+// Ensure the correct path
 
 interface Product {
     id: number;
@@ -27,6 +28,7 @@ const products: Product[] = [
     { id: 4, name: 'BVLGARI Extreme', description: 'this is desc', image: 'https://imgs.search.brave.com/1e3kPqPWdC66YCCUD_g6Qu6tN5m5cCzr-Q30QYnYN1c/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTYy/NzQyNjgyL3Bob3Rv/L3BlcmZ1bWUtYm90/dGxlLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1lc2ZvQm9W/NVlCVmVURlp0OHd1/a0dFZVNUY3hFdVBa/WnlHT3VrTUgwc253/PQ', price: '$51.74', category: 'Women' },
 ];
 
+
 const SocialMediaLinks = [
     { path: "/MyAccount", icon: <FBIcon /> },
     { path: "/MyAccount", icon: <TwitterIcon /> },
@@ -39,36 +41,60 @@ function DetailPage() {
     const { productId } = useParams<{ productId: string }>();
     const dispatch = useAppDispatch();
     const product = useAppSelector(selectProductDetails);
-
- console.log(product)
+    const [token, setToken] = useState('');
 
     useEffect(() => {
         if (productId) {
             dispatch(fetchProductDetailsAsync(productId));
         }
+
+        const userToken = 'your-token-here';
+        setToken(userToken);
     }, [dispatch, productId]);
-    const imageUrl = "https://imgs.search.brave.com/6ldLo3qzP-uU2dU7yFRY7cUPXi2YFToFdkxXaSNxrrA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTAw/MjA2NTE3OC9waG90/by9ib3R0bGUtb2Yt/cGVyZnVtZS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Z2x3/NUhHMWVOTmVGVTY4/VVlyWDZoZUZyak9U/S2tUSE95NEpuTW5P/cXJ2bz0";
+
+    const handleAddToCart = async () => {
+        try {
+            const result = await addToCart({ product_id: productId as string, quantity: 1 });
+            console.log('Added to cart', result);
+
+        } catch (error) {
+            console.error('Error adding to cart', error);
+        }
+    };
+
+    const handleAddToWishlist = async () => {
+        try {
+            const result = await addToWishlist({ product_id: productId as string });
+            console.log('Added to wishlist', result);
+
+        } catch (error) {
+            console.error('Error adding to wishlist', error);
+        }
+    };
 
     if (!product) {
         return <div>No product found.</div>;
     }
+
     return (
         <div className="px-[12rem]">
             <div className="container mx-auto bg-white p-6 rounded-lg shadow-md">
-                <div className="text-center font-semibold text-sm text-[#5c5c5c]">Sale ends in: <span className="font-bold text-[#cf8699]">22 hrs 56 min 31 sec</span></div>
+                <div className="text-center font-semibold text-sm text-[#5c5c5c]">
+                    Sale ends in: <span className="font-bold text-[#cf8699]">22 hrs 56 min 31 sec</span>
+                </div>
                 <InnerImageZoom
-                    src={imageUrl}
+                    src={product.images}
                     className="w-16 h-16 object-cover border-2 border-black mb-2"
                 />
-                <div className="flex flex-col md:flex-row ">
+                <div className="flex flex-col md:flex-row">
                     <div className="md:w-2/3 flex justify-center">
                         <InnerImageZoom
-                            src={imageUrl}
+                            src={product.images}
                             className="w-128 h-128 object-cover"
                         />
                     </div>
                     <div className="md:w-1/2 md:ml-6 mt-6 md:mt-0 justify-center">
-                        <div className="justify-center text-center ">
+                        <div className="justify-center text-center">
                             <div className="flex justify-center space-between m-4">
                                 <div className="bg-primary text-white py-1 px-4 font-bold">
                                     <h1 className="uppercase">women</h1>
@@ -78,19 +104,19 @@ function DetailPage() {
                                     <h1 className="uppercase">Gucci</h1>
                                 </div>
                             </div>
-                            <h1 className="text-3xl font-bold mb-2 text-center">GUCCI BAMBOO</h1>
-                            <div className="text-[#6f5173] underline cursor-pointer text-sm mb-4 inline-block text-center ">View All Gucci Bamboo (2)</div>
+                            <h1 className="text-3xl font-bold mb-2 text-center">{product.name}</h1>
+                            <div className="text-[#6f5173] underline cursor-pointer text-sm mb-4 inline-block text-center">View All {product.name} (2)</div>
                         </div>
                         <div className="text-center flex justify-between items-center">
-                            <p className="text-left">Eau De Toilette Spray 2.5 Oz</p>
-                            <p className="text-xs text-gray-500">Item# 300257</p>
+                            <p className="text-left">{product.description}</p>
+                            <p className="text-xs text-gray-500">Item# {product.id}</p>
                         </div>
                         <p className="text-sm mt-4 mb-4 text-secondary">Select size</p>
                         <select className="border w-full flex justify-center p-2 mb-4">
                             <option value="1.6oz">Eau De Toilette Spray 1.6 Oz</option>
                         </select>
                         <div className="flex justify-center items-center gap-2">
-                            <div className="text-3xl font-bold">$61.49</div>
+                            <div className="text-3xl font-bold">{product.price}</div>
                             <del className="text-gray-500">$88.00</del>
                             <div className="w-[15px] h-[15px] text-[12px] rounded-[50%] flex items-center justify-center text-[#c8c8c8] border-[1px] border-[#c8c8c8]">?</div>
                         </div>
@@ -98,8 +124,18 @@ function DetailPage() {
                             <div className="text-sm text-black font-semibold text-center mr-6"><span className="font-normal text-secondary">or</span> 4 payments of $15.37 with <span className="underline text-secondary">Zip</span></div>
                         </section>
                         <div className="flex justify-center items-center gap-6 mb-4">
-                            <button className="bg-primary text-white py-3 px-12 text-sm uppercase rounded-md shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary">Add to Cart</button>
-                            <button className="border-2 border-primary text-secondary py-3 px-8 text-sm uppercase rounded-md shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary">Add to Wish</button>
+                            <button
+                                onClick={handleAddToCart}
+                                className="bg-primary text-white py-3 px-12 text-sm uppercase rounded-md shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+                            >
+                                Add to Cart
+                            </button>
+                            <button
+                                onClick={handleAddToWishlist}
+                                className="border-2 border-primary text-secondary py-3 px-8 text-sm uppercase rounded-md shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+                            >
+                                Add to Wish
+                            </button>
                         </div>
                         <div className="text-xs font-normal underline text-center mb-4 cursor-pointer">Save 15% - Get Code</div>
                         <div className="text-xs font-normal underline text-center mb-4 cursor-pointer">Select a 5-piece sampler with your order. Click to learn more.</div>
@@ -112,7 +148,6 @@ function DetailPage() {
                             ))}
                         </div>
                     </div>
-
                 </div>
                 <div className="inline-flex flex-col h-30 bg-[#f5f6f6] ">
                     <div className="flex">
