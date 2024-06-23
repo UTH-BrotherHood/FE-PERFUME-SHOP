@@ -1,3 +1,4 @@
+import { configConsumerProps } from "antd/es/config-provider";
 import {
   ResetPasswordPayloadType,
   UserLoginPayloadType,
@@ -27,4 +28,18 @@ export const ForgetPassword = async (email: string) => {
   console.log(email);
   const response = await http.post(`/user/send-email`, { email: email });
   return response.data;
+};
+
+const getToken = () => {
+  return localStorage.getItem('accessToken') || ''; 
+};
+export const getUserDetails = async () => {
+ const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  const response = await http.get("/users/me", config); // Adjust endpoint as per your backend API
+  return response.data.result;
 };

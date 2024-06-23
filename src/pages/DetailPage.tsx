@@ -10,6 +10,8 @@ import TwitterIcon from "../components/DetailPage/TwitterIcon";
 import { fetchProductDetailsAsync, selectProductDetails } from "../store/features/productSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addToCart, addToWishlist } from "../apis/cartApi";
+import { getUserDetails } from "../apis/UserApi";
+import { setUser } from "../store/features/authSlice";
 // Ensure the correct path
 
 interface Product {
@@ -41,21 +43,28 @@ function DetailPage() {
     const { productId } = useParams<{ productId: string }>();
     const dispatch = useAppDispatch();
     const product = useAppSelector(selectProductDetails);
-    const [token, setToken] = useState('');
+
 
     useEffect(() => {
         if (productId) {
             dispatch(fetchProductDetailsAsync(productId));
         }
 
-        const userToken = 'your-token-here';
-        setToken(userToken);
+
     }, [dispatch, productId]);
 
     const handleAddToCart = async () => {
         try {
             const result = await addToCart({ product_id: productId as string, quantity: 1 });
             console.log('Added to cart', result);
+
+            const userDetails = await getUserDetails();
+            console.log("User details:", userDetails);
+
+          
+
+            // Save user info and token to Redux store
+            dispatch(setUser(userDetails));
 
         } catch (error) {
             console.error('Error adding to cart', error);
@@ -66,6 +75,13 @@ function DetailPage() {
         try {
             const result = await addToWishlist({ product_id: productId as string });
             console.log('Added to wishlist', result);
+            const userDetails = await getUserDetails();
+            console.log("User details:", userDetails);
+
+
+
+            // Save user info and token to Redux store
+            dispatch(setUser(userDetails));
 
         } catch (error) {
             console.error('Error adding to wishlist', error);
@@ -83,13 +99,13 @@ function DetailPage() {
                     Sale ends in: <span className="font-bold text-[#cf8699]">22 hrs 56 min 31 sec</span>
                 </div>
                 <InnerImageZoom
-                    src={product.images}
+                    src={product.images[0]}
                     className="w-16 h-16 object-cover border-2 border-black mb-2"
                 />
                 <div className="flex flex-col md:flex-row">
                     <div className="md:w-2/3 flex justify-center">
                         <InnerImageZoom
-                            src={product.images}
+                            src={product.images[0]}
                             className="w-128 h-128 object-cover"
                         />
                     </div>

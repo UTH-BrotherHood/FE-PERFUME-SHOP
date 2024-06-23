@@ -1,25 +1,21 @@
 // Header.tsx
 
+import { Badge } from 'antd';
 import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../store/store";
-import { selectCurrentUser, setUser } from "../store/features/authSlice";
-import SearchIcon from "../components/svg/SearchIcon";
-import Logo from "../components/svg/LogoIcon";
-import User from "../components/svg/UserIcon";
-import HeartIcon from "../components/svg/HeartIcon";
 import CartIcon from "../components/svg/CartIcon";
+import Logo from "../components/svg/LogoIcon";
+import SearchIcon from "../components/svg/SearchIcon";
+import User from "../components/svg/UserIcon";
+import { selectCurrentUser, setUser } from "../store/features/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import HeartIcon from '../components/svg/HeartIcon';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  console.log(user)
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-    if (storedUser) {
-      dispatch(setUser(storedUser));
-    }
-  }, [dispatch]);
 
   const navItems = [
     { path: "/Perfumes", label: "Perfumes" },
@@ -43,13 +39,19 @@ const Header: React.FC = () => {
       icon: <User />
     },
     {
-      path: "/product",
-      label: "Product",
-      icon: <HeartIcon />
+      path: "/cart",
+      label: "Cart",
+      icon: <Badge count={user?.total_cart_quantity}><CartIcon /></Badge>
     },
     {
-      path: "/dashboard",
-      label: "DashBoard"
+      path: "/wishlist",
+      label: "Wishlist",
+      icon: <Badge count={user?.total_wishlist_quantity}><HeartIcon /></Badge>
+    },
+     {
+      path: "/product",
+      label: "product",
+      
     }
   ];
 
