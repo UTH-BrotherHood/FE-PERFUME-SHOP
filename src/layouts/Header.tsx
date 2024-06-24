@@ -49,18 +49,18 @@ const Header: React.FC = () => {
     </Menu>
   );
 
-  const navItems = [
-    { path: "/Perfumes", label: "Perfumes" },
-    { path: "/Brands", label: "Brands" },
-    { path: "/Skincare", label: "Skincare" },
-    { path: "/Makeup", label: "Makeup" },
-    { path: "/Haircare", label: "Haircare" },
-    { path: "/Aromatherapy", label: "Aromatherapy" },
-    { path: "/Candles", label: "Candles" },
-    { path: "/Gifts", label: "Gifts" }
-  ];
+  // const navItems = [
+  //   { path: "/Perfumes", label: "Perfumes" },
+  //   { path: "/Brands", label: "Brands" },
+  //   { path: "/Skincare", label: "Skincare" },
+  //   { path: "/Makeup", label: "Makeup" },
+  //   { path: "/Haircare", label: "Haircare" },
+  //   { path: "/Aromatherapy", label: "Aromatherapy" },
+  //   { path: "/Candles", label: "Candles" },
+  //   { path: "/Gifts", label: "Gifts" }
+  // ];
 
-  const userLinks = [
+  const AuthLink = [
     {
       path: refreshToken ? "" : "/Sign-In",
       label: user ? (
@@ -71,7 +71,9 @@ const Header: React.FC = () => {
         </Dropdown>
       ) : "Sign In",
       icon: <UserIcon />
-    },
+    }
+  ];
+  const userLinks = [
     {
       path: "/cart",
       label: "Cart",
@@ -103,8 +105,8 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-[1.725rem] px-[3rem]">
           {/* search */}
           <div>
-            <form action="" className="flex justify-between w-[25rem] border-[1px] px-[2rem] py-[0.55rem] rounded-[1.8125rem]">
-              <input type="text" className="w-[80%] focus:outline-none" placeholder="Hey, what are you looking for?" />
+            <form action="" className="flex justify-between w-[23rem] border-[1px] px-[2rem] py-[0.25rem] rounded-[1.8125rem]">
+              <input type="text" className="w-[80%]  border-none" placeholder="Hey, what are you looking for?" />
               <button>
                 <SearchIcon />
               </button>
@@ -117,7 +119,13 @@ const Header: React.FC = () => {
             </Link>
           </div>
           <div className="flex gap-[2rem]  text-[#515151]">
-            {userLinks.map(link => (
+            {AuthLink.map(link => (
+              <Link key={link.label as string} to={link.path} className="flex justify-between items-center gap-2">
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
+            {refreshToken && userLinks.map(link => (
               <Link key={link.label as string} to={link.path} className="flex justify-between items-center gap-2">
                 {link.icon}
                 {link.label}
@@ -126,13 +134,13 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <nav className="main-menu flex text-[#515151] uppercase justify-center items-center py-3 px-[17rem] gap-[3rem]">
             {navItems.map(item => (
               <Link key={item.path} to={item.path}>{item.label}</Link>
             ))}
           </nav>
-        </div>
+        </div> */}
       </div>
     </>
   )
