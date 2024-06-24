@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CouponIcon from '../components/svg/Coupon';
 import GiftIcon from '../components/svg/Gift';
 import { getCart } from '../apis/cartApi';
+import { createShippingAddress, getAllShippingAddresses, processPayment } from '../apis/orderApi';
 
 const TableComponent: React.FC = () => {
   return (
@@ -101,13 +102,21 @@ const FormSelect: React.FC<FormSelectProps> = ({ question, label, options, value
     </select>
   </div>
 );
-
 interface CartItem {
   discount: string;
   id: string;
   name: string;
-  price: string | number | any;
+  price: string | number;
   quantity: number;
+}
+
+interface ShippingAddress {
+  id: string;
+  full_name: string;
+  phone_number: string;
+  address_line: string;
+  city: string;
+  country: string;
 }
 
 const ShippingState: React.FC = () => {
@@ -119,6 +128,8 @@ const ShippingState: React.FC = () => {
     city: '',
     country: '',
   });
+  const [shippingAddresses, setShippingAddresses] = useState<ShippingAddress[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<string>(''); 
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -131,6 +142,19 @@ const ShippingState: React.FC = () => {
     };
 
     fetchCartItems();
+  }, []);
+
+  useEffect(() => {
+    const fetchShippingAddresses = async () => {
+      try {
+        const addresses = await getAllShippingAddresses(); 
+        setShippingAddresses(addresses); 
+      } catch (error) {
+        console.error('Error fetching shipping addresses:', error);
+      }
+    };
+
+    fetchShippingAddresses();
   }, []);
 
   const [activeTab, setActiveTab] = useState<number>(1);
@@ -147,8 +171,95 @@ const ShippingState: React.FC = () => {
     }));
   };
 
-  const urlImg1 = "https://i5.walmartimages.com/seo/Lancome-La-Vie-Est-Belle-Eau-de-Parfum-Perfume-for-Women-3-4-oz_58c64918-43bb-43de-b59b-57c03197d78f_2.75529471134cc5ca27ec0dd1d0fd3a57.jpeg";
-  const urlImg2 = "https://i5.walmartimages.com/seo/Ariana-Grande-Sweet-Like-Candy-Eau-de-Parfum-Perfume-for-Women-1-Oz_6e8a4fdb-601f-42e5-86b0-0ed64fb1412a.28b228882edbbd27cf7d851dad8ec0df.jpeg";
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      let addressToUse = {}; 
+
+      if (selectedAddress) {
+        // If a shipping address is selected, use it
+        addressToUse = shippingAddresses.find(address => address.id === selectedAddress);
+      } else {
+        // If no address is selected, use new shipping info
+        const createdShippingAddress = await createShippingAddress(shippingInfo);
+        console.log('Shipping address created:', createdShippingAddress);
+        addressToUse = createdShippingAddress;
+      }
+
+      // Simulate payment information (replace with actual implementation)
+      const paymentInfo = {
+        payment_method: 'cash',
+      };
+
+      // Process payment (replace with actual implementation)
+      const paymentResponse = await processPayment(paymentInfo);
+      console.log('Payment processed:', paymentResponse);
+
+      // Navigate to next step or handle success state
+      setActiveTab(2);
+    } catch (error) {
+      console.error('Error processing shipping or payment:', error);
+    }
+  };
+
+  const calculateSubtotal = (cartItems: CartItem[]): string => {
+    const subtotal = cartItems.reduce((accumulator, item) => {
+      return accumulator + (parseFloat(item.price.toString()) * item.quantity);
+    }, 0);
+    return subtotal.toFixed(2);
+  };
+
+  const calculateShipping = (cartItems: CartItem[]): string => {
+    // Example: Flat rate shipping of $10.00
+    const flatRateShipping = 10.00;
+    return flatRateShipping.toFixed(2); // Return formatted to two decimal places
+  };
+
+  // Helper function to calculate tax
+  const calculateTax = (cartItems: CartItem[]): string => {
+    // Example: 10% tax rate
+    const taxRate = 0.10;
+    const subtotal = cartItems.reduce((accumulator, item) => {
+      return accumulator + (parseFloat(item.price.toString()) * item.quantity);
+    }, 0);
+    const tax = subtotal * taxRate;
+    return tax.toFixed(2); // Return formatted to two decimal places
+  };
+
+  // Helper function to calculate order total
+  const calculateOrderTotal = (cartItems: CartItem[]): string => {
+    const subtotal = cartItems.reduce((accumulator, item) => {
+      return accumulator + (parseFloat(item.price.toString()) * item.quantity);
+    }, 0);
+
+    const shipping = parseFloat(calculateShipping(cartItems));
+    const tax = parseFloat(calculateTax(cartItems));
+
+    const orderTotal = subtotal + shipping + tax;
+    return orderTotal.toFixed(2); // Return formatted to two decimal places
+  };
+
+  const subtotal = calculateSubtotal(cartItems);
+  const shippingCost = calculateShipping(cartItems);
+
+  const taxAmount = calculateTax(cartItems);
+  const totalAmount = calculateOrderTotal(cartItems);
+
+  const handleAddressSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    setSelectedAddress(selectedId);
+    // Optionally, you can pre-fill the shipping info fields with the selected address details
+    const selectedAddress = shippingAddresses.find(address => address.id === selectedId);
+    if (selectedAddress) {
+      setShippingInfo({
+        full_name: selectedAddress.full_name,
+        phone_number: selectedAddress.phone_number,
+        address_line: selectedAddress.address_line,
+        city: selectedAddress.city,
+        country: selectedAddress.country,
+      });
+    }
+  };
 
   return (
     <div className="px-[12rem]">
@@ -156,11 +267,21 @@ const ShippingState: React.FC = () => {
         <TabItem tabNumber={1} activeTab={activeTab} onClick={handleTabClick} label="Shipping" />
         <TabItem tabNumber={2} activeTab={activeTab} onClick={handleTabClick} label="Review & Payments" />
       </div>
+
       {activeTab === 1 && (
-        <div className="flex justify-between gap-16 mt-8">
+        <div className="flex flex-col gap-16 mt-8">
           <div>
             <p className="uppercase text-sm font-bold mb-8">SHIPPING ADDRESS</p>
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
+              {/* Select existing addresses */}
+              <FormSelect
+                label="Select Existing Address"
+                question="Select Address"
+                options={shippingAddresses?.map(address => address.id)}
+                value={selectedAddress}
+                onChange={handleAddressSelect}
+              />
+              {/* Or enter new address */}
               <FormField
                 label="Full Name"
                 type="text"
@@ -195,61 +316,145 @@ const ShippingState: React.FC = () => {
               />
               <FormSelect
                 label="Country"
+                question="Select Country"
                 options={['Vietnam', 'United States', 'United Kingdom']}
                 value={shippingInfo.country}
                 onChange={handleShippingInfoChange}
               />
+              <button
+                type="submit"
+                className="w-full py-3 bg-primary text-white rounded-md hover:bg-opacity-80 mt-4"
+              >
+                Continue to Review & Payments
+              </button>
             </form>
-            <form className='mt-10' >
-              <p className="uppercase text-sm font-bold mb-8">SHIPPING METHODS</p>
-              <TableComponent />
-              <div className="flex items-center gap-4 mt-4">
-                <div className="w-40 h-12 bg-primary font-bold text-white justify-center items-center flex text-sm">NEXT</div>
-                <div className="text-sm text-secondary">Back</div>
-              </div>
-            </form>
-            <div className="flex gap-2 items-center mt-6">
-              <input type="checkbox" id="confirm" name="confirm" />
-              <label className='text-sm text-secondary' htmlFor="confirm">YES! I'd Like To Receive Order Updates And Special Offers Via Text From PerfumeShop.Com</label>
-            </div>
           </div>
           <div>
-            <div className='p-6 bg-gray-100'>
-              <div className='flex items-center gap-4 text-sm font-bold mb-6'><GiftIcon /> Gift Message - Free! (Optional)</div>
-              <div className='flex flex-col gap-4'>
-                <FormSelect question="Select Occasion" options={['Birthday', 'Anniversary', 'Graduation']} />
-                <FormField placeholder="Your Brief Gift Message" />
-              </div>
-              <p className='text-xs text-gray-500 mt-3'>Up to 65 Characters</p>
-            </div>
-            <div className='p-6 bg-gray-100 '>
-              <p className='flex items-center gap-4 text-sm font-bold mb-6'><CouponIcon /> Coupon, Gift Certificate Or Gift Card:</p>
-              <FormField placeholder="Enter Your Coupon" />
-              <p className='text-xs text-gray-500 mt-3'>Up to 65 Characters</p>
-            </div>
-            <div className='p-6 bg-gray-100 '>
-              <p className='font-bold text-lg'>ORDER SUMMARY</p>
-              <p className="h-[1px] bg-[#E4E7E9] my-4"></p>
-              <div className='text-sm mb-2 text-secondary'>{cartItems.length} Items In Cart</div>
-              <section className='flex flex-col gap-4 '>
-                {cartItems.map((cartItem) => (
-                  <div key={cartItem.id} className='flex gap-12'>
-                    <img className='w-20 h-20' src={urlImg1} alt="" />
-                    <div className='flex flex-col gap-2 '>
-                      <p className=' w-32 text-[14px]'>{cartItem.name}<span className='text-xs'> by</span>  <span className=' text-sm underline'>Dolce & Gabbana</span></p>
-                      <p className='text-xs'>Item# {cartItem.id}</p>
-                      <p className='text-lg'>1x <span className='font-bold'>${cartItem.price}</span> <del>$78.99</del></p>
+            <p className="uppercase text-sm font-bold mb-8">YOUR ORDER</p>
+            <div className="flex flex-col gap-4">
+              {cartItems.map((item) => (
+                <div key={item.id} className="flex justify-between items-center">
+                  <div className="flex gap-4">
+                    {/* <img src={urlImg1} alt="product" className="w-[60px] h-[60px]" /> */}
+                    <div className="flex flex-col">
+                      <span className="text-primary">{item.name}</span>
+                      <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
                     </div>
-                    <p className="h-[1px] bg-[#E4E7E9] my-2"></p>
                   </div>
-                ))}
-                <p className='text-secondary text-sm'>Have a Question? <span className='text-purple-700 underline'> Contact Us Here</span></p>
-              </section>
+                  <div>${item.price}</div>
+                </div>
+              ))}
+              <div className="border-t border-gray-300 pt-4">
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Subtotal ({cartItems.length} items)</span>
+                  <span className="text-primary font-semibold">${subtotal}</span>
+                </div>
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Shipping</span>
+                  <span className="text-primary font-semibold">${shippingCost}</span>
+                </div>
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Estimated Tax</span>
+                  <span className="text-primary font-semibold">${taxAmount}</span>
+                </div>
+                <hr className="my-2 border-gray-300" />
+                <div className="flex justify-between mt-2">
+                  <span className="text-lg font-bold">Order Total</span>
+                  <span className="text-lg font-bold text-primary">${totalAmount}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
-      {activeTab === 2 && <div></div>}
+
+      {activeTab === 2 && (
+        <div className="mt-8">
+          <p className="text-lg font-semibold mb-4">Review & Payment</p>
+          {/* Placeholder for review and payment components */}
+          <div className="flex justify-between gap-16">
+            <div className="w-[70%]">
+              <p className="text-sm text-secondary mb-4">Shipping Information:</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-sm">{shippingInfo.full_name}</p>
+                <p className="text-sm">{shippingInfo.phone_number}</p>
+                <p className="text-sm">{shippingInfo.address_line}</p>
+                <p className="text-sm">{shippingInfo.city}</p>
+                <p className="text-sm">{shippingInfo.country}</p>
+              </div>
+              <hr className="my-4 border-gray-300" />
+              <p className="text-sm text-secondary mb-4">Order Summary:</p>
+              <div className="flex flex-col gap-2">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center">
+                    <div className="flex gap-4">
+                      {/* <img src={urlImg1} alt="product" className="w-[60px] h-[60px]" /> */}
+                      <div className="flex flex-col">
+                        <span className="text-primary">{item.name}</span>
+                        <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
+                      </div>
+                    </div>
+                    <div>${item.price}</div>
+                  </div>
+                ))}
+                <hr className="my-2 border-gray-300" />
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Subtotal ({cartItems.length} items)</span>
+                  <span className="text-primary font-semibold">${subtotal}</span>
+                </div>
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Shipping</span>
+                  <span className="text-primary font-semibold">${shippingCost}</span>
+                </div>
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm text-secondary">Estimated Tax</span>
+                  <span className="text-primary font-semibold">${taxAmount}</span>
+                </div>
+                <hr className="my-2 border-gray-300" />
+                <div className="flex justify-between mt-2">
+                  <span className="text-lg font-bold">Order Total</span>
+                  <span className="text-lg font-bold text-primary">${totalAmount}</span>
+                </div>
+              </div>
+            </div>
+            <div className="w-[30%]">
+              <div className="p-6 bg-gray-100">
+                <div className="flex items-center gap-4 text-sm font-bold mb-6">
+                  <GiftIcon />
+                  Gift Message - Free! (Optional)
+                </div>
+                <div className="flex flex-col gap-4">
+                  <FormSelect question="Select Occasion" options={['Birthday', 'Anniversary', 'Graduation']} />
+                  <FormField placeholder="Your Brief Gift Message" />
+                </div>
+                <p className="text-xs text-gray-500 mt-3">Up to 65 Characters</p>
+              </div>
+              <div className="p-6 bg-gray-100">
+                <p className="flex items-center gap-4 text-sm font-bold mb-6">
+                  <CouponIcon />
+                  Coupon, Gift Certificate Or Gift Card:
+                </p>
+                <FormField placeholder="Enter Your Coupon" />
+                <p className="text-xs text-gray-500 mt-3">Up to 65 Characters</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="confirm" name="confirm" />
+              <label className="text-sm text-secondary" htmlFor="confirm">
+                YES! I'd Like To Receive Order Updates And Special Offers Via Text From PerfumeShop.Com
+              </label>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-40 h-12 bg-primary font-bold text-white justify-center items-center flex text-sm cursor-pointer">
+                PLACE ORDER
+              </div>
+              <div className="text-sm text-secondary cursor-pointer">Back</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
