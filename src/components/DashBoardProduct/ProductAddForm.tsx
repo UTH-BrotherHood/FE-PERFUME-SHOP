@@ -57,12 +57,12 @@ export default function ProductAddForm() {
     setLoading(true);
     try {
       const result = await createProduct(values, accessToken as string);
-      console.log("Result:", result);
+  
       toast({
         description: "Product added successfully!",
       });
     } catch (error: any) {
-      console.log("Error:", error.response.data);
+   
       handleErrorsApi({
         error: error.response.data,
         setError: form.setError,

@@ -38,13 +38,13 @@ export default function SignUpForm() {
         setLoading(true);
         try {
             const result = await http.post("/users/register", values);
-            console.log("Result:", result);
+          
             toast({
                 description: result.data.message,
             });
             navigate('/sign-in')
         } catch (error: any) {
-            console.log("Error:", error.response.data);
+           
             handleErrorsApi({
                 error: error.response.data,
                 setError: form.setError,

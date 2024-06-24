@@ -14,7 +14,7 @@ import HeartIcon from '../components/svg/HeartIcon';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
-  console.log(user)
+
 
 
   const navItems = [

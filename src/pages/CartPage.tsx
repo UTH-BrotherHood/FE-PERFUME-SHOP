@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CiCircleAlert } from 'react-icons/ci';
 import { HiOutlineTrash } from "react-icons/hi2";
 import { BsTicketPerforated, BsGift, BsPaypal } from "react-icons/bs";
@@ -6,7 +6,9 @@ import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import AmazonIcon from '../components/svg/AmazonIcon';
 import { FaRegHeart } from "react-icons/fa6";
-// import { SlLock } from "react-icons/sl";
+import { useAppSelector } from '../store/store';
+import { selectCurrentUser } from '../store/features/authSlice';
+import { getCart, deleteFromCart, changeQuantity } from '../apis/cartApi';
 
 interface Product {
   id: number;
@@ -48,18 +50,76 @@ const products: Product[] = [
 ];
 
 interface CartItem {
-  product: Product;
+  discount: string;
+  id: string;
+  name: string;
+  price: string | number | any;
   quantity: number;
 }
 
-const cartItems: CartItem[] = [
-  { product: products[0], quantity: 1 },
-  { product: products[1], quantity: 2 },
-  { product: products[2], quantity: 1 },
-  { product: products[3], quantity: 3 },
-];
-
 const CartPage = () => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await getCart();
+        setCartItems(response.result); 
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
+  const handleDelete = async (productId: string) => {
+    try {
+      await deleteFromCart(productId);
+      setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
+
+    
+      const response = await getCart();
+      setCartItems(response.result);
+    } catch (error) {
+      console.error('Error deleting cart item:', error);
+    }
+  };
+
+
+  const handleChangeQuantity = async (productId: string, quantity: number) => {
+    try {
+      const updatedItem = await changeQuantity({ product_id: productId, quantity });
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === productId ? { ...item, quantity: updatedItem.quantity } : item
+        )
+      );
+
+      
+      const response = await getCart();
+      setCartItems(response.result);
+    } catch (error) {
+      console.error('Error changing cart item quantity:', error);
+    }
+  };
+
+
+
+  const handleAddToCart = async (productId: string, increment: number) => {
+    try {
+      const item = cartItems.find((cartItem) => cartItem.id === productId);
+      if (item) {
+        const newQuantity = item.quantity + increment;
+        await handleChangeQuantity(productId, newQuantity);
+      } else {
+      console.log('oh no loi roi')
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
   return (
     <div className="container mx-auto">
       <h2 className="text-3xl font-extrabold uppercase text-center my-8">Shopping Cart</h2>
@@ -79,47 +139,63 @@ const CartPage = () => {
             <div>Quantity</div>
             <div>Total</div>
           </div>
-          {cartItems.map((cartItem) => (
-            <div key={cartItem.product.id} className="cart-item grid grid-cols-5 items-center pb-2 mb-4 relative">
+          {cartItems?.map((cartItem) => (
+            <div key={cartItem.id} className="cart-item grid grid-cols-5 items-center pb-2 mb-4 relative">
               <div className="flex items-center col-span-2">
-                <img src={cartItem.product.image} alt={cartItem.product.name} className="w-20 h-20" />
+                <img src='https://img.pokemondb.net/artwork/avif/shedinja.avif' alt={cartItem.name} className="w-20 h-20" />
                 <div className="ml-4 leading-relaxed">
-                  <p>{cartItem.product.name}</p>
+                  <p>{cartItem.name}</p>
                   <p className="text-sm text-gray-400 mb-2">Eau De Toilette Spray 3.3 Oz</p>
-                  <p className="text-sm text-gray-400">Item# 120682</p>
+                  <p className="text-sm text-gray-400">Item# {cartItem.id}</p>
                 </div>
               </div>
               <div>
-                <div className="text-sm text-gray-500 line-through">{cartItem.product.price}</div>
-                <div className="font-bold">{cartItem.product.price}</div>
+                <div className="text-sm text-gray-500 line-through">{cartItem.price}</div>
+                <div className="font-bold">{cartItem.price}</div>
               </div>
               <div className="flex items-center justify-evenly border-2 w-32">
-                <button className="decrease text-lg">-</button>
+                <button
+                  className="decrease text-lg"
+                  onClick={() => handleAddToCart(cartItem.id, -1)}
+                  disabled={cartItem.quantity <= 1}
+                >
+                  -
+                </button>
                 <input
                   type="number"
                   value={cartItem.quantity}
                   min="1"
                   className="text-center border-none w-10 h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-0"
+                  onChange={(e) => handleChangeQuantity(cartItem.id, parseInt(e.target.value))}
                 />
-                <button className="increase text-lg">+</button>
+                <button
+                  className="increase text-lg"
+                  onClick={() => handleAddToCart(cartItem.id, 1)}
+                >
+                  +
+                </button>
               </div>
               <div>
                 <div className="line-through text-gray-500 text-sm">
-                  ${(parseFloat(cartItem.product.price.replace('$', '')) * cartItem.quantity).toFixed(2)}
+                  ${(parseFloat(cartItem.price.replace('$', '')) * cartItem.quantity).toFixed(2)}
                 </div>
                 <div className="font-bold">
-                  ${(parseFloat(cartItem.product.price.replace('$', '')) * cartItem.quantity).toFixed(2)}
+                  ${(parseFloat(cartItem.price.replace('$', '')) * cartItem.quantity).toFixed(2)}
+                
                 </div>
               </div>
               <div>
-                <button className="text-gray-400 text-xl absolute right-0 top-[45%] translate-y-[-50%]">
+                <button
+                  className="text-gray-400 text-xl absolute right-0 top-[45%] translate-y-[-50%]"
+                  onClick={() => handleDelete(cartItem.id)}
+                >
                   <HiOutlineTrash />
                 </button>
               </div>
             </div>
           ))}
           <div className="flex relative justify-between border-t-2 py-2">
-            <button className="text-sm font-bold uppercase border-2 p-3 mt-5">Continue Shopping</button>
+            <Link to='/product' className="text-sm font-bold uppercase border-2 p-3 mt-5">Continue Shopping</Link>
             <button className="text-sm font-bold uppercase border-2 p-3 mt-5">Clear Shopping Cart</button>
           </div>
         </div>
@@ -169,7 +245,7 @@ const CartPage = () => {
               <Link to={""} className="text-sm text-gray-500 underline">Check Out With Multiple Addresses</Link>
             </div>
             <div className="mt-6">
-              <Button content={`Proceed To Secure Checkout`} type="button" w="full" h="12" />
+              <Link to='/shipping-state'><Button content={`Proceed To Secure Checkout`} type="button" w="full" h="12" /></Link> 
             </div>
             <div className="mt-4 flex justify-center items-center gap-2 text-xs">
               <div><span className="text-gray-500">or</span> 4 payments of $25.37 with</div>
@@ -200,7 +276,7 @@ const CartPage = () => {
               <div key={product.id} className="border p-3 rounded-lg text-center shadow-lg hover:shadow-xl transition-shadow duration-200">
                 <div className='flex items-center justify-between mb-2'>
                   <p className="bg-[#774C7D] font-bold uppercase text-white text-xs p-[4px]">{product.category}</p>
-                  <FaRegHeart className='text-gray-400'/>
+                  <FaRegHeart className='text-gray-400' />
                 </div>
                 <img src={product.image} alt={product.name} className="object-contain aspect-video mb-4" />
                 <div className='flex flex-col gap-2'>
@@ -212,11 +288,11 @@ const CartPage = () => {
                   Add to Bag
                 </button>
               </div>
-              
+
             ))}
           </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

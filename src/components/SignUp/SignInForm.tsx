@@ -29,7 +29,7 @@ export default function SignInForm() {
         setLoading(true);
         try {
             const result = await http.post("/users/login", values);
-            console.log("Result:", result);
+          
             toast({
                 description: result.data.message,
             });
@@ -44,10 +44,10 @@ export default function SignInForm() {
          
             localStorage.setItem("accessToken", token);
 
-            console.log(result.data.result);
+         
             navigate('/');
         } catch (error: any) {
-            console.log("Error:", error.response.data);
+           
             handleErrorsApi({
                 error: error.response.data,
                 setError: form.setError,

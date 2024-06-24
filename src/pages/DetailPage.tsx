@@ -56,10 +56,10 @@ function DetailPage() {
     const handleAddToCart = async () => {
         try {
             const result = await addToCart({ product_id: productId as string, quantity: 1 });
-            console.log('Added to cart', result);
+           
 
             const userDetails = await getUserDetails();
-            console.log("User details:", userDetails);
+           
 
           
 
@@ -74,9 +74,9 @@ function DetailPage() {
     const handleAddToWishlist = async () => {
         try {
             const result = await addToWishlist({ product_id: productId as string });
-            console.log('Added to wishlist', result);
+           
             const userDetails = await getUserDetails();
-            console.log("User details:", userDetails);
+         
 
 
 

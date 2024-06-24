@@ -25,7 +25,7 @@ export const ResetPassword = async (data: ResetPasswordPayloadType) => {
 };
 
 export const ForgetPassword = async (email: string) => {
-  console.log(email);
+ 
   const response = await http.post(`/user/send-email`, { email: email });
   return response.data;
 };

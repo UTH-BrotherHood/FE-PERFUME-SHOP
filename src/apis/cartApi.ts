@@ -44,3 +44,54 @@ export const addToWishlist = async (item: IWishlistItem) => {
     throw error;
   }
 };
+
+export const getCart = async () => {
+  try {
+    const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const response = await http.get("/cart/", config);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    throw error;
+  }
+};
+export const deleteFromCart = async (productId: string) => {
+  try {
+    const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const response = await http.delete(`/cart/`, {
+      data: { product_id: productId },
+      ...config
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting from cart:", error);
+    throw error;
+  }
+};
+
+
+export const changeQuantity = async (item: ICartItem) => {
+  try {
+    const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const response = await http.patch(`/cart/`, { product_id: item.product_id, quantity: item.quantity }, config);
+    return response.data;
+  } catch (error) {
+    console.error("Error changing quantity:", error);
+    throw error;
+  }
+};

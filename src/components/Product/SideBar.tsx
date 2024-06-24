@@ -20,7 +20,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ setBrandFilter, setPriceRangeFilter, setSizeFilter, setGenderFilter, resetFilters }) => {
     const categories = useAppSelector(selectCategories);
-    console.log(categories)
+
     const loading = useAppSelector(selectCategoriesLoading);
     const error = useAppSelector(selectCategoriesError);
 
