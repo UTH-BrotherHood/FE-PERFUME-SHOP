@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CouponIcon from '../components/svg/Coupon';
 import GiftIcon from '../components/svg/Gift';
-import { getCart } from '../apis/cartApi';
-import { createShippingAddress, getAllShippingAddresses, placeOrderApiCall, processPayment } from '../apis/orderApi';
+import { getCart } from './cartApi';
+import { createShippingAddress, getAllShippingAddresses, processPayment } from './orderApi';
 
 const TableComponent: React.FC = () => {
   return (
@@ -119,12 +119,6 @@ interface ShippingAddress {
   country: string;
 }
 
-interface PaymentResponse {
-  result: {
-    id: string;
-  };
-}
-
 const ShippingState: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [shippingInfo, setShippingInfo] = useState({
@@ -135,8 +129,7 @@ const ShippingState: React.FC = () => {
     country: '',
   });
   const [shippingAddresses, setShippingAddresses] = useState<ShippingAddress[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<number>(1);
+  const [selectedAddress, setSelectedAddress] = useState<string>(''); 
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -154,8 +147,8 @@ const ShippingState: React.FC = () => {
   useEffect(() => {
     const fetchShippingAddresses = async () => {
       try {
-        const addresses = await getAllShippingAddresses();
-        setShippingAddresses(addresses);
+        const addresses = await getAllShippingAddresses(); 
+        setShippingAddresses(addresses); 
       } catch (error) {
         console.error('Error fetching shipping addresses:', error);
       }
@@ -163,6 +156,8 @@ const ShippingState: React.FC = () => {
 
     fetchShippingAddresses();
   }, []);
+
+  const [activeTab, setActiveTab] = useState<number>(1);
 
   const handleTabClick = (tabNumber: number) => {
     setActiveTab(tabNumber);
@@ -179,52 +174,31 @@ const ShippingState: React.FC = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      let addressToUse: ShippingAddress | undefined;
+      let addressToUse = {}; 
 
       if (selectedAddress) {
+        // If a shipping address is selected, use it
         addressToUse = shippingAddresses.find(address => address.id === selectedAddress);
       } else {
+        // If no address is selected, use new shipping info
         const createdShippingAddress = await createShippingAddress(shippingInfo);
         console.log('Shipping address created:', createdShippingAddress);
         addressToUse = createdShippingAddress;
       }
 
+      // Simulate payment information (replace with actual implementation)
+      const paymentInfo = {
+        payment_method: 'cash',
+      };
+
+      // Process payment (replace with actual implementation)
+      const paymentResponse = await processPayment(paymentInfo);
+      console.log('Payment processed:', paymentResponse);
+
+      // Navigate to next step or handle success state
       setActiveTab(2);
     } catch (error) {
       console.error('Error processing shipping or payment:', error);
-    }
-  };
-
-  const handlePlaceOrder = async () => {
-    try {
-      let addressToUse: ShippingAddress | undefined;
-
-      if (selectedAddress) {
-        addressToUse = shippingAddresses.find(address => address.id === selectedAddress);
-      } else {
-        const createdShippingAddress = await createShippingAddress(shippingInfo);
-        console.log('Shipping address created:', createdShippingAddress);
-        addressToUse = createdShippingAddress;
-      }
-
-      const paymentMethod = (document.querySelector('input[name="paymentMethod"]:checked') as HTMLInputElement)?.value;
-
-      const paymentInfo = {
-        payment_method: paymentMethod || 'cash',
-      };
-      const paymentResponse: PaymentResponse = await processPayment(paymentInfo);
-      console.log('Payment processed:', paymentResponse);
-
-      const orderInfo = {
-        address_id: addressToUse?.id,
-        payment_id: paymentResponse.result.id,
-      };
-
-      const orderResponse = await placeOrderApiCall(orderInfo);
-      console.log('Order placed:', orderResponse);
-
-    } catch (error) {
-      console.error('Error placing order:', error);
     }
   };
 
@@ -236,19 +210,23 @@ const ShippingState: React.FC = () => {
   };
 
   const calculateShipping = (cartItems: CartItem[]): string => {
+    // Example: Flat rate shipping of $10.00
     const flatRateShipping = 10.00;
-    return flatRateShipping.toFixed(2);
+    return flatRateShipping.toFixed(2); // Return formatted to two decimal places
   };
 
+  // Helper function to calculate tax
   const calculateTax = (cartItems: CartItem[]): string => {
+    // Example: 10% tax rate
     const taxRate = 0.10;
     const subtotal = cartItems.reduce((accumulator, item) => {
       return accumulator + (parseFloat(item.price.toString()) * item.quantity);
     }, 0);
     const tax = subtotal * taxRate;
-    return tax.toFixed(2);
+    return tax.toFixed(2); // Return formatted to two decimal places
   };
 
+  // Helper function to calculate order total
   const calculateOrderTotal = (cartItems: CartItem[]): string => {
     const subtotal = cartItems.reduce((accumulator, item) => {
       return accumulator + (parseFloat(item.price.toString()) * item.quantity);
@@ -258,17 +236,19 @@ const ShippingState: React.FC = () => {
     const tax = parseFloat(calculateTax(cartItems));
 
     const orderTotal = subtotal + shipping + tax;
-    return orderTotal.toFixed(2);
+    return orderTotal.toFixed(2); // Return formatted to two decimal places
   };
 
   const subtotal = calculateSubtotal(cartItems);
   const shippingCost = calculateShipping(cartItems);
+
   const taxAmount = calculateTax(cartItems);
   const totalAmount = calculateOrderTotal(cartItems);
 
   const handleAddressSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = e.target.value;
     setSelectedAddress(selectedId);
+    // Optionally, you can pre-fill the shipping info fields with the selected address details
     const selectedAddress = shippingAddresses.find(address => address.id === selectedId);
     if (selectedAddress) {
       setShippingInfo({
@@ -293,6 +273,7 @@ const ShippingState: React.FC = () => {
           <div>
             <p className="uppercase text-sm font-bold mb-8">SHIPPING ADDRESS</p>
             <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
+              {/* Select existing addresses */}
               <FormSelect
                 label="Select Existing Address"
                 question="Select Address"
@@ -300,6 +281,7 @@ const ShippingState: React.FC = () => {
                 value={selectedAddress}
                 onChange={handleAddressSelect}
               />
+              {/* Or enter new address */}
               <FormField
                 label="Full Name"
                 type="text"
@@ -353,6 +335,7 @@ const ShippingState: React.FC = () => {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex justify-between items-center">
                   <div className="flex gap-4">
+                    {/* <img src={urlImg1} alt="product" className="w-[60px] h-[60px]" /> */}
                     <div className="flex flex-col">
                       <span className="text-primary">{item.name}</span>
                       <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
@@ -371,12 +354,13 @@ const ShippingState: React.FC = () => {
                   <span className="text-primary font-semibold">${shippingCost}</span>
                 </div>
                 <div className="flex justify-between mt-2">
-                  <span className="text-sm text-secondary">Tax</span>
+                  <span className="text-sm text-secondary">Estimated Tax</span>
                   <span className="text-primary font-semibold">${taxAmount}</span>
                 </div>
+                <hr className="my-2 border-gray-300" />
                 <div className="flex justify-between mt-2">
-                  <span className="text-sm text-secondary">Total</span>
-                  <span className="text-primary font-semibold">${totalAmount}</span>
+                  <span className="text-lg font-bold">Order Total</span>
+                  <span className="text-lg font-bold text-primary">${totalAmount}</span>
                 </div>
               </div>
             </div>
@@ -385,46 +369,35 @@ const ShippingState: React.FC = () => {
       )}
 
       {activeTab === 2 && (
-        <div className="flex flex-col gap-16 mt-8">
-          <div>
-            <p className="uppercase text-sm font-bold mb-8">PAYMENT METHOD</p>
-            <form className="flex flex-col gap-4">
-              <div className="flex gap-4">
-                <input type="radio" id="cash" name="paymentMethod" value="cash" defaultChecked />
-                <label htmlFor="cash">Cash</label>
+        <div className="mt-8">
+          <p className="text-lg font-semibold mb-4">Review & Payment</p>
+          {/* Placeholder for review and payment components */}
+          <div className="flex justify-between gap-16">
+            <div className="w-[70%]">
+              <p className="text-sm text-secondary mb-4">Shipping Information:</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-sm">{shippingInfo.full_name}</p>
+                <p className="text-sm">{shippingInfo.phone_number}</p>
+                <p className="text-sm">{shippingInfo.address_line}</p>
+                <p className="text-sm">{shippingInfo.city}</p>
+                <p className="text-sm">{shippingInfo.country}</p>
               </div>
-              <div className="flex gap-4">
-                <input type="radio" id="credit-card" name="paymentMethod" value="credit_card" />
-                <label htmlFor="credit-card">Credit Card</label>
-              </div>
-              <div className="flex gap-4">
-                <input type="radio" id="paypal" name="paymentMethod" value="paypal" />
-                <label htmlFor="paypal">PayPal</label>
-              </div>
-              <button
-                type="button"
-                onClick={handlePlaceOrder}
-                className="w-full py-3 bg-primary text-white rounded-md hover:bg-opacity-80 mt-4"
-              >
-                Place Order
-              </button>
-            </form>
-          </div>
-          <div>
-            <p className="uppercase text-sm font-bold mb-8">YOUR ORDER</p>
-            <div className="flex flex-col gap-4">
-              {cartItems.map((item) => (
-                <div key={item.id} className="flex justify-between items-center">
-                  <div className="flex gap-4">
-                    <div className="flex flex-col">
-                      <span className="text-primary">{item.name}</span>
-                      <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
+              <hr className="my-4 border-gray-300" />
+              <p className="text-sm text-secondary mb-4">Order Summary:</p>
+              <div className="flex flex-col gap-2">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center">
+                    <div className="flex gap-4">
+                      {/* <img src={urlImg1} alt="product" className="w-[60px] h-[60px]" /> */}
+                      <div className="flex flex-col">
+                        <span className="text-primary">{item.name}</span>
+                        <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
+                      </div>
                     </div>
+                    <div>${item.price}</div>
                   </div>
-                  <div>${item.price}</div>
-                </div>
-              ))}
-              <div className="border-t border-gray-300 pt-4">
+                ))}
+                <hr className="my-2 border-gray-300" />
                 <div className="flex justify-between mt-2">
                   <span className="text-sm text-secondary">Subtotal ({cartItems.length} items)</span>
                   <span className="text-primary font-semibold">${subtotal}</span>
@@ -434,14 +407,50 @@ const ShippingState: React.FC = () => {
                   <span className="text-primary font-semibold">${shippingCost}</span>
                 </div>
                 <div className="flex justify-between mt-2">
-                  <span className="text-sm text-secondary">Tax</span>
+                  <span className="text-sm text-secondary">Estimated Tax</span>
                   <span className="text-primary font-semibold">${taxAmount}</span>
                 </div>
+                <hr className="my-2 border-gray-300" />
                 <div className="flex justify-between mt-2">
-                  <span className="text-sm text-secondary">Total</span>
-                  <span className="text-primary font-semibold">${totalAmount}</span>
+                  <span className="text-lg font-bold">Order Total</span>
+                  <span className="text-lg font-bold text-primary">${totalAmount}</span>
                 </div>
               </div>
+            </div>
+            <div className="w-[30%]">
+              <div className="p-6 bg-gray-100">
+                <div className="flex items-center gap-4 text-sm font-bold mb-6">
+                  <GiftIcon />
+                  Gift Message - Free! (Optional)
+                </div>
+                <div className="flex flex-col gap-4">
+                  <FormSelect question="Select Occasion" options={['Birthday', 'Anniversary', 'Graduation']} />
+                  <FormField placeholder="Your Brief Gift Message" />
+                </div>
+                <p className="text-xs text-gray-500 mt-3">Up to 65 Characters</p>
+              </div>
+              <div className="p-6 bg-gray-100">
+                <p className="flex items-center gap-4 text-sm font-bold mb-6">
+                  <CouponIcon />
+                  Coupon, Gift Certificate Or Gift Card:
+                </p>
+                <FormField placeholder="Enter Your Coupon" />
+                <p className="text-xs text-gray-500 mt-3">Up to 65 Characters</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="confirm" name="confirm" />
+              <label className="text-sm text-secondary" htmlFor="confirm">
+                YES! I'd Like To Receive Order Updates And Special Offers Via Text From PerfumeShop.Com
+              </label>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-40 h-12 bg-primary font-bold text-white justify-center items-center flex text-sm cursor-pointer">
+                PLACE ORDER
+              </div>
+              <div className="text-sm text-secondary cursor-pointer">Back</div>
             </div>
           </div>
         </div>
@@ -451,3 +460,4 @@ const ShippingState: React.FC = () => {
 };
 
 export default ShippingState;
+

@@ -8,7 +8,8 @@ export interface IShippingInfo {
   country: string
 }
 export interface IPaymentInfo {
-     payment_method: string
+    payment_method: string
+    
 
 }
 const getToken = () => {
@@ -56,6 +57,25 @@ export const getAllShippingAddresses = async () => {
     return response.data.result; // Trả về danh sách địa chỉ giao hàng từ backend
   } catch (error) {
     console.error("Error fetching shipping addresses:", error);
+    throw error;
+  }
+};
+export interface IorderInfo{
+    address_id: string | undefined
+    payment_id:string | undefined
+}
+export const placeOrderApiCall = async (orderInfo: IorderInfo) => {
+    try {
+          const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const response = await http.post("/orders", orderInfo,config);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating product:", error);
     throw error;
   }
 };
