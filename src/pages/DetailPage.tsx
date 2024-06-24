@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { addToCart, addToWishlist } from "../apis/cartApi";
 import { getUserDetails } from "../apis/UserApi";
 import { setUser } from "../store/features/authSlice";
+import { useToast } from "../components/ui/use-toast";
 
 
 interface Product {
@@ -43,6 +44,7 @@ function DetailPage() {
     const { productId } = useParams<{ productId: string }>();
     const dispatch = useAppDispatch();
     const product = useAppSelector(selectProductDetails);
+    const { toast } = useToast();
 
 
     useEffect(() => {
@@ -56,31 +58,29 @@ function DetailPage() {
     const handleAddToCart = async () => {
         try {
             const result = await addToCart({ product_id: productId as string, quantity: 1 });
-           
-
-            const userDetails = await getUserDetails();
-           
-
-          
-
-         
-            dispatch(setUser(userDetails));
-
+            toast({
+                description: result.message,
+                duration: 3000,
+            });
         } catch (error) {
-            console.error('Error adding to cart', error);
+            toast({
+                description: (error as any).response?.data?.message,
+                duration: 3000,
+            });
         }
+
     };
 
     const handleAddToWishlist = async () => {
         try {
             const result = await addToWishlist({ product_id: productId as string });
-           
+
             const userDetails = await getUserDetails();
-         
 
 
 
-           
+
+
             dispatch(setUser(userDetails));
 
         } catch (error) {

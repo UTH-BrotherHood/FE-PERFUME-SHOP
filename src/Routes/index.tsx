@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
 import AuthPage from "../pages/AuthPage";
 import CartPage from "../pages/CartPage";
@@ -9,6 +10,8 @@ import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import ShippingState from "../pages/ShippingState";
+import TestCaiDauBuoiToast from "../pages/TestCaiDauBuoiToast";
+import VerifyEmail from "../pages/VerifyEmail";
 
 interface Route {
     path: string;
@@ -48,6 +51,16 @@ const publicRoutes: Route[] = [
         path: "/product/:productId",
         component: DetailPage,
         layout: MainLayout,
+    },
+    {
+        path: "/verify-email",
+        component: VerifyEmail,
+        layout: BlankLayout,
+    },
+    {
+        path: "TestCaiDauBuoiToast",
+        component: TestCaiDauBuoiToast,
+        layout: BlankLayout,
     },
     {
         path: "/dashboard",

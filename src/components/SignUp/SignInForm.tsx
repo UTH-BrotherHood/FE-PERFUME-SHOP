@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
@@ -8,7 +8,7 @@ import { SignInBodyType } from "../../schemaValidations/auth.schema";
 import { handleErrorsApi } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/store";
-import { userLogin, setUser, setAccessToken } from "../../store/features/authSlice";
+import { setUser, setAccessToken } from "../../store/features/authSlice";
 import http from '../../utils/http';
 
 export default function SignInForm() {
@@ -29,25 +29,29 @@ export default function SignInForm() {
         setLoading(true);
         try {
             const result = await http.post("/users/login", values);
-          
+
             toast({
                 description: result.data.message,
             });
 
             const user = result.data.result.userInfo;
-            const token = result.data.result.access_token;
+            const access_token = result.data.result.access_token;
+            const refresh_token = result.data.result.refresh_token;
 
-          
+
             dispatch(setUser(user));
-            dispatch(setAccessToken(token));
+            dispatch(setAccessToken(access_token));
 
-         
-            localStorage.setItem("accessToken", token);
 
-         
+            localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("refreshToken", refresh_token);
+
+
+
             navigate('/');
+            window.location.reload();
         } catch (error: any) {
-           
+
             handleErrorsApi({
                 error: error.response.data,
                 setError: form.setError,

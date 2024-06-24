@@ -38,13 +38,14 @@ export default function SignUpForm() {
         setLoading(true);
         try {
             const result = await http.post("/users/register", values);
-          
+
             toast({
-                description: result.data.message,
+                description: result.data.message + " Please verify your email by clicking the link in the email we sent you.",
+                duration: 10000,
             });
             navigate('/sign-in')
         } catch (error: any) {
-           
+
             handleErrorsApi({
                 error: error.response.data,
                 setError: form.setError,

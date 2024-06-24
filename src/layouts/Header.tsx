@@ -1,21 +1,53 @@
 // Header.tsx
 
-import { Badge } from 'antd';
-import React, { useEffect } from 'react';
+import { Badge, Dropdown, Menu } from 'antd';
+import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
 import CartIcon from "../components/svg/CartIcon";
 import Logo from "../components/svg/LogoIcon";
 import SearchIcon from "../components/svg/SearchIcon";
-import User from "../components/svg/UserIcon";
-import { selectCurrentUser, setUser } from "../store/features/authSlice";
-import { useAppDispatch, useAppSelector } from "../store/store";
+import UserIcon from "../components/svg/UserIcon";
 import HeartIcon from '../components/svg/HeartIcon';
+import { UserContext } from '../contexts/UserContext';
+import axios from 'axios';
+import { useToast } from '../components/ui/use-toast';
 
 const Header: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const user = useAppSelector(selectCurrentUser);
+  const { user, setUser } = useContext(UserContext) || {};
+  const { toast } = useToast();
+  const refreshToken = localStorage.getItem('refreshToken');
+  const config = {
+    baseURL: 'http://localhost:8001',
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  };
+  const handleSignOut = () => {
+    // Xử lý đăng xuất
+    if (setUser) {
+      setUser(null);
+    }
+    axios.post("/users/logout", { refresh_token: refreshToken }, config).then((res) => {
+      toast({
+        description: "You have been signed out",
+      });
+    })
 
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
 
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="profile">
+        <Link to="/MyAccount">My Profile</Link>
+      </Menu.Item>
+      <Menu.Item key="signout" onClick={handleSignOut}>
+        Sign Out
+      </Menu.Item>
+    </Menu>
+  );
 
   const navItems = [
     { path: "/Perfumes", label: "Perfumes" },
@@ -30,13 +62,15 @@ const Header: React.FC = () => {
 
   const userLinks = [
     {
-      path: "/MyAccount",
+      path: refreshToken ? "" : "/Sign-In",
       label: user ? (
-        <span className=" ">
-          hello {user.username}
-        </span>
-      ) : "My Account",
-      icon: <User />
+        <Dropdown overlay={menu}>
+          <span className="cursor-pointer">
+            Hello {user.username}
+          </span>
+        </Dropdown>
+      ) : "Sign In",
+      icon: <UserIcon />
     },
     {
       path: "/cart",
@@ -48,10 +82,9 @@ const Header: React.FC = () => {
       label: "Wishlist",
       icon: <Badge count={user?.total_wishlist_quantity}><HeartIcon /></Badge>
     },
-     {
+    {
       path: "/product",
-      label: "product",
-      
+      label: "Product",
     }
   ];
 
@@ -106,4 +139,3 @@ const Header: React.FC = () => {
 }
 
 export default Header;
-
