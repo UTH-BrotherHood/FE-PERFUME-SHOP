@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import AmazonIcon from '../components/svg/AmazonIcon';
 import { FaRegHeart } from "react-icons/fa6";
-import { useAppSelector } from '../store/store';
-import { selectCurrentUser } from '../store/features/authSlice';
+// import { useAppSelector } from '../store/store';
+// import { selectCurrentUser } from '../store/features/authSlice';
 import { getCart, deleteFromCart, changeQuantity } from '../apis/cartApi';
 
 interface Product {
@@ -52,6 +52,7 @@ const products: Product[] = [
 interface CartItem {
   discount: string;
   id: string;
+  images: string[];
   name: string;
   price: string | number | any;
   quantity: number;
@@ -142,7 +143,7 @@ const CartPage = () => {
           {cartItems?.map((cartItem) => (
             <div key={cartItem.id} className="cart-item grid grid-cols-5 items-center pb-2 mb-4 relative">
               <div className="flex items-center col-span-2">
-                <img src='https://img.pokemondb.net/artwork/avif/shedinja.avif' alt={cartItem.name} className="w-20 h-20" />
+                <img src={cartItem.images[0]} alt={cartItem.name} className="w-20 h-20" />
                 <div className="ml-4 leading-relaxed">
                   <p>{cartItem.name}</p>
                   <p className="text-sm text-gray-400 mb-2">Eau De Toilette Spray 3.3 Oz</p>
@@ -228,17 +229,13 @@ const CartPage = () => {
           </div>
           <div className="mt-3 space-y-4 bg-[#F5F6F6] p-6">
             <div className="flex flex-col gap-3">
-              <div className="flex justify-between font-bold">
-                <span>Subtotal</span>
-                <span>175 USD</span>
-              </div>
-              <div className="flex justify-between text-gray-500">
-                <span>Tax</span>
-                <span className='text-sm'>0.00 USD</span>
-              </div>
               <div className="flex justify-between font-extrabold">
                 <span>ORDER TOTAL</span>
-                <span>175 USD</span>
+                <span>
+                  {cartItems?.reduce((accumulator, currentValue) => {
+                    return accumulator + (parseFloat(currentValue.price.replace('$', '')) * currentValue.quantity);
+                  }, 0).toFixed(2)} USD
+                </span>
               </div>
             </div>
             <div className="text-center border-t-2 pt-5">

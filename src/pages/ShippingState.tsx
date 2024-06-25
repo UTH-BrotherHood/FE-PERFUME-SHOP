@@ -332,13 +332,20 @@ const ShippingState: React.FC = () => {
                 onChange={handleShippingInfoChange}
                 name="city"
               />
-              <FormSelect
+              <FormField
                 label="Country"
-                question="Select Country"
-                options={['Vietnam', 'United States', 'United Kingdom']}
+                type="text"
+                placeholder="Enter your country"
                 value={shippingInfo.country}
                 onChange={handleShippingInfoChange}
+                name="country"
               />
+              {/* <FormField
+                label="Country"
+                type="text"
+                value={shippingInfo.country}
+                onChange={handleShippingInfoChange}
+              /> */}
               <button
                 type="submit"
                 className="w-full py-3 bg-primary text-white rounded-md hover:bg-opacity-80 mt-4"

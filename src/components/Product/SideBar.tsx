@@ -71,9 +71,11 @@ const SideBar: React.FC<SideBarProps> = ({ setBrandFilter, setPriceRangeFilter, 
                                 {loading && <p>Loading...</p>}
                                 {error && <p>Error: {error}</p>}
                                 {!loading && !error && (
-                                    <div>
+                                    <div className='text-white flex flex-col gap-2'>
                                         {categories?.map((category) => (
-                                            <Button key={category.id} onClick={() => setBrandFilter([category.id])}>
+                                            <Button key={category.id} onClick={() => setBrandFilter([category.id])}
+                                            className='bg-[#BE5B75] text-white uppercase font-bold text-sm h-[2.875rem] w-full rounded-none'
+                                            >
                                                 {category.name}
                                             </Button>
                                         ))}
