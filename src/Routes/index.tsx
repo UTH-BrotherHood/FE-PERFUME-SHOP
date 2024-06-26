@@ -8,10 +8,13 @@ import CouponPage from "../pages/CouponPage";
 import DashBoardProduct from "../pages/DashBoardProduct";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
+import OrderHistory from "../pages/OrderHistory";
 import ProductPage from "../pages/ProductPage";
+import ProfilePage from "../pages/ProfilePage";
 import ShippingState from "../pages/ShippingState";
 import TestCaiDauBuoiToast from "../pages/TestCaiDauBuoiToast";
 import VerifyEmail from "../pages/VerifyEmail";
+import WishList from "../pages/WishList";
 
 interface Route {
     path: string;
@@ -88,6 +91,21 @@ const privateRoutes: Route[] = [
         path: "/shipping-state",
         component: ShippingState,
         layout: MainLayout,
-    },];
+    },
+
+    {
+        path: "/MyAccount",
+        component: ProfilePage,
+    },
+    {
+        path: "/orderhistory",
+        component: OrderHistory,
+    },
+    {
+        path: "/wishlist",
+        component: WishList,
+    },
+
+];
 
 export { privateRoutes, publicRoutes };

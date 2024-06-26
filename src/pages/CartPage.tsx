@@ -143,7 +143,7 @@ const CartPage = () => {
           {cartItems?.map((cartItem) => (
             <div key={cartItem.id} className="cart-item grid grid-cols-5 items-center pb-2 mb-4 relative">
               <div className="flex items-center col-span-2">
-                <img src={cartItem.images[0]} alt={cartItem.name} className="w-20 h-20" />
+                <img src='https://img.pokemondb.net/artwork/avif/shedinja.avif' alt={cartItem.name} className="w-20 h-20" />
                 <div className="ml-4 leading-relaxed">
                   <p>{cartItem.name}</p>
                   <p className="text-sm text-gray-400 mb-2">Eau De Toilette Spray 3.3 Oz</p>
@@ -265,31 +265,7 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      <div className='py-8'>
-        <h2 className="text-3xl font-extrabold uppercase text-center mb-8">Top Beauty Add-Ons</h2>
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-12">
-            {products.map((product) => (
-              <div key={product.id} className="border p-3 rounded-lg text-center shadow-lg hover:shadow-xl transition-shadow duration-200">
-                <div className='flex items-center justify-between mb-2'>
-                  <p className="bg-[#774C7D] font-bold uppercase text-white text-xs p-[4px]">{product.category}</p>
-                  <FaRegHeart className='text-gray-400' />
-                </div>
-                <img src={product.image} alt={product.name} className="object-contain aspect-video mb-4" />
-                <div className='flex flex-col gap-2'>
-                  <h3 className="text-lg font-extrabold mb-2 uppercase">{product.name}</h3>
-                  <p className='text-sm'>Eau De Parfum</p>
-                  <p className="mb-1">from <span className='font-extrabold'>{product.price}</span></p>
-                </div>
-                <button className="w-4/5 p-2 border uppercase text-sm font-extrabold border-gray-300 hover:border-slate-300 mt-4 text-black bg-white hover:bg-gray-100 transition-colors duration-200">
-                  Add to Bag
-                </button>
-              </div>
-
-            ))}
-          </div>
-        </div>
-      </div>
+     
     </div>
   );
 };
