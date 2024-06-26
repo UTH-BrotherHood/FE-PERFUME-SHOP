@@ -22,9 +22,7 @@ interface IProduct {
 
 export const fetchProductDetails = async (productId: string) => {
   try {
-   
-
-     const response = await http.get(`/products/${productId}`);
+    const response = await http.get(`/products/${productId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -61,3 +59,14 @@ export const createProduct = async (product: IProduct) => {
     throw error;
   }
 };
+
+
+export const deleteProduct = async (productId: string) => {
+  try {
+    const response = await http.delete(`/products/${productId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+}

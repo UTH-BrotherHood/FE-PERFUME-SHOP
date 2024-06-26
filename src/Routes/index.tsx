@@ -66,6 +66,11 @@ const publicRoutes: Route[] = [
         path: "/dashboard",
         component: DashBoardProduct,
     },
+    {
+        path: "/cart",
+        component: CartPage,
+        layout: MainLayout,
+    },
 ];
 const privateRoutes: Route[] = [
 

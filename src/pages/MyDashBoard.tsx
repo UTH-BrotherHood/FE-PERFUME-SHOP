@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <button className="w-full mt-4 p-2 border border-red-500 text-red-500 bg-white text-center">Log Out</button>
-            <div className="mt-6 p-4 text-center border p-4 bg-white">
+            <div className="mt-6 text-center border p-4 bg-white">
               <h3 className="font-bold">WIN A $250 SHOPPING SPREE!</h3>
               <p>Take Part In Our Monthly Giveaway</p>
               <a href="#" className="text-purple-400 underline">Enter Now</a>

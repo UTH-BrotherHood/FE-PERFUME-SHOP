@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { fetchProducts, fetchProductDetails } from "../../apis/ProductApi"; // Import the API function to fetch product details
+import { fetchProducts, fetchProductDetails, deleteProduct } from "../../apis/ProductApi"; // Import the API function to fetch product details
 
 interface Product {
   result: Product,
@@ -58,6 +58,14 @@ export const fetchProductDetailsAsync = createAsyncThunk(
   }
 );
 
+export const deleteProductAsync = createAsyncThunk(
+  "products/deleteProduct",
+  async (productId: string) => {
+    await deleteProduct(productId);
+    return productId;
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState,
@@ -86,7 +94,19 @@ const productSlice = createSlice({
       .addCase(fetchProductDetailsAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message ?? "Failed to fetch product details";
+      })
+      .addCase(deleteProductAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteProductAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter((product) => product.id !== action.payload);
+      })
+      .addCase(deleteProductAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Failed to delete product";
       });
+
   },
 });
 
