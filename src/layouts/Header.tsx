@@ -2,7 +2,7 @@
 
 import { Badge, Dropdown, Menu } from 'antd';
 import React, { useContext } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "../components/svg/CartIcon";
 import Logo from "../components/svg/LogoIcon";
 import SearchIcon from "../components/svg/SearchIcon";
@@ -22,6 +22,7 @@ const Header: React.FC = () => {
       Authorization: `Bearer ${refreshToken}`,
     },
   };
+  const navigate = useNavigate()
   const handleSignOut = () => {
     // Xử lý đăng xuất
     if (setUser) {
@@ -35,7 +36,7 @@ const Header: React.FC = () => {
 
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-
+navigate('/')
   };
 
   const menu = (
@@ -62,7 +63,7 @@ const Header: React.FC = () => {
 
   const AuthLink = [
     {
-      path: refreshToken ? "" : "/Sign-In",
+      path: refreshToken ? "" : "/sign-In",
       label: user ? (
         <Dropdown overlay={menu}>
           <span className="cursor-pointer">

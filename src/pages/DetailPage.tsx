@@ -62,6 +62,7 @@ function DetailPage() {
                 description: result.message,
                 duration: 3000,
             });
+            
         } catch (error) {
             toast({
                 description: (error as any).response?.data?.message,
@@ -76,9 +77,6 @@ function DetailPage() {
             const result = await addToWishlist({ product_id: productId as string });
 
             const userDetails = await getUserDetails();
-
-
-
 
 
             dispatch(setUser(userDetails));

@@ -3,6 +3,8 @@ import CouponIcon from '../components/svg/Coupon';
 import GiftIcon from '../components/svg/Gift';
 import { getCart } from '../apis/cartApi';
 import { createShippingAddress, getAllShippingAddresses, placeOrderApiCall, processPayment } from '../apis/orderApi';
+import { Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const TableComponent: React.FC = () => {
   return (
@@ -137,6 +139,8 @@ const ShippingState: React.FC = () => {
   const [shippingAddresses, setShippingAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [activeTab, setActiveTab] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const navigate = useNavigate(); // Updated for navigation
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -199,34 +203,47 @@ const ShippingState: React.FC = () => {
     try {
       let addressToUse: ShippingAddress | undefined;
 
+
       if (selectedAddress) {
         addressToUse = shippingAddresses.find(address => address.id === selectedAddress);
       } else {
+        // Create a new shipping address if none selected
         const createdShippingAddress = await createShippingAddress(shippingInfo);
         console.log('Shipping address created:', createdShippingAddress);
         addressToUse = createdShippingAddress;
       }
 
+
       const paymentMethod = (document.querySelector('input[name="paymentMethod"]:checked') as HTMLInputElement)?.value;
+
 
       const paymentInfo = {
         payment_method: paymentMethod || 'cash',
       };
+
+
       const paymentResponse: PaymentResponse = await processPayment(paymentInfo);
       console.log('Payment processed:', paymentResponse);
+
 
       const orderInfo = {
         address_id: addressToUse?.id,
         payment_id: paymentResponse.result.id,
       };
 
+
       const orderResponse = await placeOrderApiCall(orderInfo);
       console.log('Order placed:', orderResponse);
 
+
+      setShowModal(true);
+
     } catch (error) {
       console.error('Error placing order:', error);
+
     }
   };
+
 
   const calculateSubtotal = (cartItems: CartItem[]): string => {
     const subtotal = cartItems.reduce((accumulator, item) => {
@@ -453,8 +470,32 @@ const ShippingState: React.FC = () => {
           </div>
         </div>
       )}
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <div className="p-4">
+            <h2 className="text-xl font-semibold">Order Placed Successfully!</h2>
+            <p className="mt-2">Your order has been placed successfully. What would you like to do next?</p>
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                onClick={() => navigate('/shop')}
+                className="px-4 py-2 text-white bg-primary rounded"
+              >
+                Continue Shopping
+              </button>
+              <button
+                onClick={() => navigate('/order-history')}
+                className="px-4 py-2 text-white bg-primary rounded"
+              >
+                View Order History
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
+
   );
+
 };
 
 export default ShippingState;
