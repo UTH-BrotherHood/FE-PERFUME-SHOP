@@ -18,37 +18,6 @@ interface Product {
   category: string;
 }
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: 'Armaf Passion',
-    image: 'https://imgs.search.brave.com/YYoedtFQ-5pMUYc0HiZbP5WT_LQCKNPuY3jMOetk2lg/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTIw/NjA1MTU4MC9waG90/by9wZXJmdW1lLWJv/dHRsZS1vbi1ib2tl/aC1saWdodHMtYmFj/a2dyb3VuZC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9LTVo/RS1RNXo4ZkFGY0ha/LS1Dcl9yUnN2VjR2/OWxDWEV4cXBLSEFY/ZmhmVT0',
-    price: '$51.74',
-    category: 'Women',
-  },
-  {
-    id: 2,
-    name: 'BVLGARI Extreme',
-    image: 'https://imgs.search.brave.com/WehMyYodpaLyjnFQZBZ0DH3ogle8WvdqTbavN8kr13Q/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQ3/NTAzMDczL3Bob3Rv/L3BlcmZ1bWUuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPTZv/VFAzZ3ZpM3R2Zjla/cWEtcWpyWi1Gc2lm/X0FvdlpJbjRfSVpz/cENMV2c9',
-    price: '$51.74',
-    category: 'Women',
-  },
-  {
-    id: 3,
-    name: 'Armaf Passion',
-    image: 'https://imgs.search.brave.com/k1VQOqkelQWFue91HGiKWiIyY-SpcN2ikF-kJvi66xw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTA1/OTYyMTQ2L3Bob3Rv/L3ZpbnRhZ2UtcGVy/ZnVtZS1ib3R0bGUu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PWltOUhBbGRFczRU/MXRxNzhBQzRQOXU1/TEN1em5VU3MwVGV4/bGdMYVptakk9',
-    price: '$51.74',
-    category: 'Women',
-  },
-  {
-    id: 4,
-    name: 'BVLGARI Extreme',
-    image: 'https://imgs.search.brave.com/1e3kPqPWdC66YCCUD_g6Qu6tN5m5cCzr-Q30QYnYN1c/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTYy/NzQyNjgyL3Bob3Rv/L3BlcmZ1bWUtYm90/dGxlLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1lc2ZvQm9W/NVlCVmVURlp0OHd1/a0dFZVNUY3hFdVBa/WnlHT3VrTUgwc253/PQ',
-    price: '$51.74',
-    category: 'Women',
-  },
-];
-
 interface CartItem {
   discount: string;
   id: string;
@@ -143,7 +112,7 @@ const CartPage = () => {
           {cartItems?.map((cartItem) => (
             <div key={cartItem.id} className="cart-item grid grid-cols-5 items-center pb-2 mb-4 relative">
               <div className="flex items-center col-span-2">
-                <img src='https://img.pokemondb.net/artwork/avif/shedinja.avif' alt={cartItem.name} className="w-20 h-20" />
+                <img src={cartItem.images[0]} alt={cartItem.name} className="w-20 h-20" />
                 <div className="ml-4 leading-relaxed">
                   <p>{cartItem.name}</p>
                   <p className="text-sm text-gray-400 mb-2">Eau De Toilette Spray 3.3 Oz</p>
