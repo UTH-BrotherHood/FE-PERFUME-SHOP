@@ -14,9 +14,9 @@ import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import OrderHistory from "../pages/OrderHistory";
 import ProductPage from "../pages/ProductPage";
+import ProductUpdateForm from "../pages/ProductUpdateForm";
 import ProfilePage from "../pages/ProfilePage";
 import ShippingState from "../pages/ShippingState";
-import TestCaiDauBuoiToast from "../pages/TestCaiDauBuoiToast";
 import VerifyEmail from "../pages/VerifyEmail";
 import WishList from "../pages/WishList";
 
@@ -64,11 +64,7 @@ const publicRoutes: Route[] = [
         component: VerifyEmail,
         layout: BlankLayout,
     },
-    {
-        path: "TestCaiDauBuoiToast",
-        component: TestCaiDauBuoiToast,
-        layout: BlankLayout,
-    },
+    
 
     {
         path: "/cart",
@@ -123,6 +119,11 @@ const privateRoutes: Route[] = [
     {
         path: "/dashboard/products/AddProduct",
         component: AddProduct,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/products/:idUpdateProduct",
+        component: ProductUpdateForm,
         layout: DashBoardLayout,
     },
 

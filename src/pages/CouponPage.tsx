@@ -18,9 +18,9 @@ const Coupons: React.FC = () => {
   }, []);
 
   return (
-   
+
     <div className="container mx-auto p-4 text-center">
-        <p className='pb-2'>HOME {">"} PerfumeShop Coupons</p>
+      <p className='pb-2'>HOME {">"} PerfumeShop Coupons</p>
       <h1 className="text-2xl font-bold mb-4 ">PERFUMESHOP COUPONS*</h1>
       <p className="mb-4">Save BIG On Your Favorite Beauty Products. Check Out Our Exclusive Coupons Below.</p>
       <p className="mb-4 text-gray-500 no-underline">* Coupon valid for online orders only</p>
@@ -30,10 +30,10 @@ const Coupons: React.FC = () => {
             <h2 className="text-lg font-semibold mb-2">{coupon.discount}</h2>
             <p className="mb-2">{coupon.description}</p>
             <p className="mb-4 text-gray-500">Expires: {coupon.expiryDate}</p>
-            <a href="/" className="bg-blue-500 text-white px-4 py-2 rounded">
+            <a href="/" className="bg-primary text-white px-4 py-2 rounded">
               REDEEM COUPON
             </a>
-            
+
           </div>
 
         ))}

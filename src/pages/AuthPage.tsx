@@ -8,13 +8,13 @@ const TabHeader: React.FC<{ activeTab: string; setActiveTab: (tab: string) => vo
     return (
         <div className="flex justify-center gap-10 mb-6">
             <button
-                className={`py-2 px-4 ${activeTab === 'signUp' ? 'border-b-2 border-blue-500' : ''}`}
+                className={`py-2 px-4 ${activeTab === 'signUp' ? 'border-b-2 border-primary' : ''}`}
                 onClick={() => setActiveTab('signUp')}
             >
                 Sign Up
             </button>
             <button
-                className={`py-2 px-4 ${activeTab === 'signIn' ? 'border-b-2 border-blue-500' : ''}`}
+                className={`py-2 px-4 ${activeTab === 'signIn' ? 'border-b-2 border-primary' : ''}`}
                 onClick={() => setActiveTab('signIn')}
             >
                 Sign In

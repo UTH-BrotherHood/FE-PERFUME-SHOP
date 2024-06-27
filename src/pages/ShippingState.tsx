@@ -47,8 +47,8 @@ const TabItem: React.FC<TabItemProps> = ({ tabNumber, activeTab, onClick, label 
   return (
     <div className="flex flex-col items-center gap-8 cursor-pointer" onClick={() => onClick(tabNumber)}>
       <div className={`flex justify-center items-center w-[200px] h-[3px] ${isActive ? 'bg-primary' : 'bg-border'}`}>
-        <div className={`flex items-center justify-center bg-white border-[3px] rounded-[50%] w-[3rem] h-[3rem] ${isActive ? 'border-primary' : 'border-border'}`}>
-          {isActive ? 'a' : ''}
+        <div className={`flex items-center justify-center bg-white border-[3px] rounded-[50%] text-sm w-[3rem] h-[3rem] ${isActive ? 'border-primary' : 'border-border'}`}>
+          {isActive ? 'State' : ''}
         </div>
       </div>
       <div className={`text-sm font-medium ${isActive ? 'text-primary font-semibold' : 'text-border'}`}>
@@ -105,6 +105,7 @@ const FormSelect: React.FC<FormSelectProps> = ({ question, label, options, value
   </div>
 );
 interface CartItem {
+  images: any;
   discount: string;
   id: string;
   name: string;
@@ -299,7 +300,7 @@ const ShippingState: React.FC = () => {
   };
 
   return (
-    <div className="px-[12rem]">
+    <div className="px-[12rem] mt-10">
       <div className="flex justify-center items-center">
         <TabItem tabNumber={1} activeTab={activeTab} onClick={handleTabClick} label="Shipping" />
         <TabItem tabNumber={2} activeTab={activeTab} onClick={handleTabClick} label="Review & Payments" />
@@ -376,7 +377,9 @@ const ShippingState: React.FC = () => {
             <div className="flex flex-col gap-4">
               {cartItems.map((item) => (
                 <div key={item.id} className="flex justify-between items-center">
-                  <div className="flex gap-4">
+                  
+                  <div className="flex gap-4 items-center">
+                    <img src={item.images[0]} className='w-20 h-20' alt="" />
                     <div className="flex flex-col">
                       <span className="text-primary">{item.name}</span>
                       <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
@@ -439,8 +442,10 @@ const ShippingState: React.FC = () => {
             <div className="flex flex-col gap-4">
               {cartItems.map((item) => (
                 <div key={item.id} className="flex justify-between items-center">
-                  <div className="flex gap-4">
+                  <div className="flex items-center gap-4">
+                    <img src={item.images[0]} className='w-20 h-20' alt="" />
                     <div className="flex flex-col">
+                      
                       <span className="text-primary">{item.name}</span>
                       <span className="text-sm text-gray-500">Quantity: {item.quantity}</span>
                     </div>
@@ -477,7 +482,7 @@ const ShippingState: React.FC = () => {
             <p className="mt-2">Your order has been placed successfully. What would you like to do next?</p>
             <div className="flex justify-end mt-4 gap-2">
               <button
-                onClick={() => navigate('/shop')}
+                onClick={() => navigate('/product')}
                 className="px-4 py-2 text-white bg-primary rounded"
               >
                 Continue Shopping

@@ -63,7 +63,7 @@ navigate('/')
 
   const AuthLink = [
     {
-      path: refreshToken ? "" : "/sign-In",
+      path: refreshToken ? "/sign-In" : "/sign-In",
       label: user ? (
         <Dropdown overlay={menu}>
           <span className="cursor-pointer">

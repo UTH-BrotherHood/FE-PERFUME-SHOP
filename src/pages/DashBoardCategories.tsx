@@ -69,7 +69,7 @@ function DashBoardCategories() {
     return (
         <div className='p-4 px-10 relative'>
             <h1 className="text-2xl font-bold mb-4 text-center">Dashboard</h1>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700">Add Category</button>
+            <button className="bg-primary text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700">Add Category</button>
             <div className="grid grid-cols-4 gap-4 p-2 bg-gray-200 font-semibold">
                 <div className="col-span-1 ml-14">Category</div>
                 <div className='text-center col-span-1'>Description</div>
@@ -85,7 +85,7 @@ function DashBoardCategories() {
                         <div className='col-span-1'>{category.description}</div>
                         <div className='col-span-1'>{new Date(category.created_at || '').toLocaleDateString()}</div>
                         <div className="flex space-x-2 justify-center col-span-1">
-                            <button className="text-blue-500 hover:text-blue-700">
+                            <button className="text-primary hover:text-blue-700">
                                 <MdModeEdit />
                             </button>
                             <button className="text-red-500 hover:text-red-700">

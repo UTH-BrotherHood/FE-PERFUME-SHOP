@@ -19,7 +19,7 @@ export default function SignInForm() {
 
     const form = useForm<SignInBodyType>({
         defaultValues: {
-            email: "xuannvuongg+2269@gmail.com",
+            email: "thuyy566@gmail.com",
             password: "String.123",
         },
     });

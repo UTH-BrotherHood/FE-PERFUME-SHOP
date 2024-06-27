@@ -9,17 +9,17 @@ function DashBoardLayout({ children }: { children: React.ReactNode }) {
                 <ul className="text-black">
                     <p className="text-4xl text-center mb-6">Perfume Shop</p>
                     <li className="mb-4">
-                        <a href="/dashboard/" className={`block py-2 px-4 rounded ${location.pathname === '/dashboard/' ? 'bg-blue-500 text-white' : ''}`}>
+                        <a href="/dashboard/" className={`block py-2 px-4 rounded ${location.pathname === '/dashboard/' ? 'bg-primary text-white' : ''}`}>
                             Home
                         </a>
                     </li>
                     <li className="mb-4">
-                        <a href="/dashboard/products" className={`block py-2 px-4 rounded ${location.pathname.includes('/dashboard/products') ? 'bg-blue-500 text-white' : ''}`}>
+                        <a href="/dashboard/products" className={`block py-2 px-4 rounded ${location.pathname.includes('/dashboard/products') ? 'bg-primary text-white' : ''}`}>
                             Products
                         </a>
                     </li>
                     <li className="mb-4">
-                        <a href="/dashboard/categories" className={`block py-2 px-4 rounded ${location.pathname.includes('/dashboard/categories') ? 'bg-blue-500 text-white' : ''}`}>
+                        <a href="/dashboard/categories" className={`block py-2 px-4 rounded ${location.pathname.includes('/dashboard/categories') ? 'bg-primary text-white' : ''}`}>
                             Categories
                         </a>
                     </li>

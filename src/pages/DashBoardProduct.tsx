@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../components/ui/alert-dialog"
+import { Link } from 'react-router-dom';
 
 function DashBoardProduct() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -76,7 +77,7 @@ function DashBoardProduct() {
   return (
     <div className='p-4 px-10 relative'>
       <h1 className="text-2xl font-bold mb-4 text-center">Dashboard</h1>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700"><a href='/dashboard/products/AddProduct'>Add Product</a></button>
+      <button className="bg-primary text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700"><a href='/dashboard/products/AddProduct'>Add Product</a></button>
       <div className="grid grid-cols-7 gap-4 p-2 bg-gray-200 font-semibold">
         <div className="col-span-3 ml-14">Products</div>
         <div className='text-center'>Category</div>
@@ -99,9 +100,9 @@ function DashBoardProduct() {
             <div>{product.stock}</div>
             <div>${product.price}</div>
             <div className="flex space-x-2 justify-center">
-              <button className="text-blue-500 hover:text-blue-700">
+              <Link to={`/dashboard/products/${product.id}`} className="text-primary hover:text-blue-700">
                 <MdModeEdit />
-              </button>
+              </Link>
               <button className="text-green-500 hover:text-green-700">
                 <a href={`/product/${product.id}`} target='blank'>
                   <IoEyeSharp />
