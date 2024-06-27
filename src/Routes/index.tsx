@@ -2,6 +2,7 @@
 import BlankLayout from "../layouts/BlankLayout";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import MainLayout from "../layouts/MainLayout";
+import AddCategory from "../pages/AddCetegory";
 import AddProduct from "../pages/AddProduct";
 import AuthPage from "../pages/AuthPage";
 import CartPage from "../pages/CartPage";
@@ -123,6 +124,11 @@ const privateRoutes: Route[] = [
     {
         path: "/dashboard/products/AddProduct",
         component: AddProduct,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/categories/AddCategory",
+        component: AddCategory,
         layout: DashBoardLayout,
     },
 
