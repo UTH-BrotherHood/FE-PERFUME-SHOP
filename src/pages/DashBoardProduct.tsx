@@ -76,10 +76,10 @@ function DashBoardProduct() {
   return (
     <div className='p-4 px-10 relative'>
       <h1 className="text-2xl font-bold mb-4 text-center">Dashboard</h1>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700">Add Product</button>
+      <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700"><a href='/dashboard/products/AddProduct'>Add Product</a></button>
       <div className="grid grid-cols-7 gap-4 p-2 bg-gray-200 font-semibold">
         <div className="col-span-3 ml-14">Products</div>
-        <div className='text-center'>Product</div>
+        <div className='text-center'>Category</div>
         <div className='text-center'>Stock</div>
         <div className='text-center'>Price</div>
         <div className='text-center'>Action</div>
@@ -95,7 +95,7 @@ function DashBoardProduct() {
               </div>
               {product.name}
             </div>
-            <div className='capitalize'>{(product.id as string).split('_')[0]}</div>
+            <div className='capitalize'>{product.category_name}</div>
             <div>{product.stock}</div>
             <div>${product.price}</div>
             <div className="flex space-x-2 justify-center">

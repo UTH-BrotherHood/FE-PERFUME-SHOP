@@ -2,6 +2,7 @@
 import BlankLayout from "../layouts/BlankLayout";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import MainLayout from "../layouts/MainLayout";
+import AddProduct from "../pages/AddProduct";
 import AuthPage from "../pages/AuthPage";
 import CartPage from "../pages/CartPage";
 import ContactUs from "../pages/ContactUs";
@@ -68,21 +69,7 @@ const publicRoutes: Route[] = [
         component: TestCaiDauBuoiToast,
         layout: BlankLayout,
     },
-    {
-        path: "/dashboard/products",
-        component: DashBoardProduct,
-        layout: DashBoardLayout,
-    },
-    {
-        path: "/dashboard/categories",
-        component: DashBoardCategories,
-        layout: DashBoardLayout,
-    },
-    {
-        path: "/dashboard",
-        component: DashBoard,
-        layout: DashBoardLayout,
-    },
+
     {
         path: "/cart",
         component: CartPage,
@@ -106,7 +93,6 @@ const privateRoutes: Route[] = [
         component: ShippingState,
         layout: MainLayout,
     },
-
     {
         path: "/MyAccount",
         component: ProfilePage,
@@ -118,6 +104,26 @@ const privateRoutes: Route[] = [
     {
         path: "/wishlist",
         component: WishList,
+    },
+    {
+        path: "/dashboard/products",
+        component: DashBoardProduct,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/categories",
+        component: DashBoardCategories,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard",
+        component: DashBoard,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/products/AddProduct",
+        component: AddProduct,
+        layout: DashBoardLayout,
     },
 
 ];
