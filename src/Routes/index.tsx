@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BlankLayout from "../layouts/BlankLayout";
+import DashBoardLayout from "../layouts/DashBoardLayout";
 import MainLayout from "../layouts/MainLayout";
 import AuthPage from "../pages/AuthPage";
 import CartPage from "../pages/CartPage";
 import ContactUs from "../pages/ContactUs";
 import CouponPage from "../pages/CouponPage";
+import DashBoard from "../pages/DashBoard";
+import DashBoardCategories from "../pages/DashBoardCategories";
 import DashBoardProduct from "../pages/DashBoardProduct";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
@@ -66,8 +69,19 @@ const publicRoutes: Route[] = [
         layout: BlankLayout,
     },
     {
-        path: "/dashboard",
+        path: "/dashboard/products",
         component: DashBoardProduct,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/categories",
+        component: DashBoardCategories,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard",
+        component: DashBoard,
+        layout: DashBoardLayout,
     },
     {
         path: "/cart",

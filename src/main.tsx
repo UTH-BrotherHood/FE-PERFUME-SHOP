@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { Toaster } from './components/ui/toaster.tsx';
 import { UserProvider } from './contexts/UserContext.tsx';
+import ErrorBoundary from './utils/errorBoundary.tsx';
 
 
 

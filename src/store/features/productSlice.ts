@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { fetchProducts, fetchProductDetails, deleteProduct } from "../../apis/ProductApi"; // Import the API function to fetch product details
 
-interface Product {
+export interface Product {
   result: Product,
   id?: string;
   category_id: string;
