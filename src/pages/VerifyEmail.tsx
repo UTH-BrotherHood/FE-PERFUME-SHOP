@@ -26,6 +26,7 @@ export default function VerifyEmail() {
                         console.log(res);
                         alert(res.data.message);
                         window.location.href = "/sign-in";
+                        localStorage.setItem('accessToken', res.data.accessToken);
                     })
                     .catch((err) => {
                         console.error(err);

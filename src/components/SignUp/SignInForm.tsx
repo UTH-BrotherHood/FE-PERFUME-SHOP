@@ -63,7 +63,7 @@ export default function SignInForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 items-center">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 ">
                 <div className="flex flex-col gap-11 mt-4">
                     <div className="flex gap-11">
                         <FormField

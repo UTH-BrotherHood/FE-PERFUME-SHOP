@@ -58,8 +58,8 @@ export default function SignUpForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 items-center">
-                <div className="flex gap-11">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-[70%]">
+                <div className="flex gap-36">
                     <FormField
                         control={form.control}
                         name="name"
@@ -92,7 +92,7 @@ export default function SignUpForm() {
                     />
                 </div>
                 <div className="flex flex-col gap-11 mt-4">
-                    <div className="flex gap-11">
+                    <div className="flex gap-36">
                         <FormField
                             control={form.control}
                             name="password"
