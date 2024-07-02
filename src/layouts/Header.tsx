@@ -1,7 +1,7 @@
 // Header.tsx
 
 import { Badge, Dropdown, Menu } from 'antd';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "../components/svg/CartIcon";
 import Logo from "../components/svg/LogoIcon";
@@ -11,6 +11,8 @@ import HeartIcon from '../components/svg/HeartIcon';
 import { UserContext } from '../contexts/UserContext';
 import axios from 'axios';
 import { useToast } from '../components/ui/use-toast';
+import { fetchProductsAsync } from '../store/features/productSlice';
+import { useAppDispatch } from '../store/store';
 
 const Header: React.FC = () => {
   const { user, setUser } = useContext(UserContext) || {};
@@ -36,9 +38,12 @@ const Header: React.FC = () => {
 
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-navigate('/')
+    navigate('/')
   };
-
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchProductsAsync({ page: 1, limit: 8 }));
+  }, [dispatch]);
   const menu = (
     <Menu>
       <Menu.Item key="profile">
@@ -63,11 +68,11 @@ navigate('/')
 
   const AuthLink = [
     {
-      path: refreshToken ? "/sign-In" : "/sign-In",
+      path: refreshToken ? "/MyAccount" : "/sign-In",
       label: user ? (
         <Dropdown overlay={menu}>
           <span className="cursor-pointer">
-            Hello {user.username}
+            Hello <span className='italic text-[#975c3f]'>{user.username}</span>
           </span>
         </Dropdown>
       ) : "Sign In",
@@ -80,11 +85,7 @@ navigate('/')
       label: "Cart",
       icon: <Badge count={user?.total_cart_quantity}><CartIcon /></Badge>
     },
-    {
-      path: "/wishlist",
-      label: "Wishlist",
-      icon: <Badge count={user?.total_wishlist_quantity}><HeartIcon /></Badge>
-    },
+
     {
       path: "/product",
       label: "Product",

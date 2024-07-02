@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import http from '../utils/http';
 
 interface IWishlistItem {
+    images: string[];
     id: string;
     name: string;
     price: string;
@@ -39,14 +40,17 @@ const Wishlist: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-6 text-primary">Wishlist</h1>
+        <div className="border border-gray-200 bg-white">
+            <div className="flex items-center font-bold py-4 pl-6 rounded-t border-b border-gray-200 bg-white text-gray-900 text-sm uppercase">
+               Wish list
+            </div>
             <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
-                <thead className="bg-primary text-white">
+                <thead className="bg-[#F5F5F7] text-[#8B8E99] text-[0.7rem]">
                     <tr>
+                        <th className="py-3 px-4">Image</th>
                         <th className="py-3 px-4">Name</th>
                         <th className="py-3 px-4">Price</th>
-                        <th className="py-3 px-4">Discount</th>
+                        
                         <th className="py-3 px-4">Stock</th>
                         <th className="py-3 px-4">Action</th>
                     </tr>
@@ -54,22 +58,23 @@ const Wishlist: React.FC = () => {
                 <tbody>
                     {wishlistItems.map(item => (
                         <tr key={item.id} className="border-t">
-                            <td className="py-3 px-4">{item.name}</td>
-                            <td className="py-3 px-4">{item.price}</td>
-                            <td className="py-3 px-4">{item.discount}</td>
-                            <td className="py-3 px-4">
-                                <span className={item.stock > 0 ? 'text-green-500' : 'text-red-500'}>
+                            <td className="py-3 pl-14 "><img className="w-20 h-20" src={item.images[0]} alt="" /></td>
+                            <th className="text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap font-public-sans text-sm font-normal leading-5 w-58">{ item.name}</th>
+                            <th className="py-3 px-4 font-normal text-sm">${item.price}</th>
+                          
+                            <th className="py-3 px-4 font-semibold">
+                                <span className={item.stock > 0 ? 'text-[#25B800]' : 'text-red-500'}>
                                     {item.stock > 0 ? 'In stock' : 'Out of stock'}
                                 </span>
-                            </td>
-                            <td className="py-3 px-4">
+                            </th>
+                            <th className="py-3 px-4 ">
                                 <button
                                     onClick={() => addToCart(item)}
-                                    className="bg-primary text-white font-bold py-2 px-4 rounded hover:bg-primary-dark"
+                                    className="bg-primary font-semibold text-white py-2 px-4 rounded hover:bg-primary-dark"
                                 >
                                     Add to Cart
                                 </button>
-                            </td>
+                            </th>
                         </tr>
                     ))}
                 </tbody>

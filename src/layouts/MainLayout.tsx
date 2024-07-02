@@ -6,9 +6,9 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <Header />
-            <div className="mt-6">   <Breadcrumb /></div>
+            {/* <div className="mt-6">   <Breadcrumb /></div> */}
          
-            <div >{children}</div>
+            <div className="my-12">{children}</div>
             <Footer />
         </>
     )

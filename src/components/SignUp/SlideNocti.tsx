@@ -91,15 +91,15 @@ export default function SlideNocti() {
                                 <div className=" flex py-24 gap-12">
                                     <img src={d.image} alt={d.title} className="w-48 rounded-[50%] h-48" />
                                     <div className='flex flex-col items-baseline'>
-                                        <Quote/>
-                                     
+                                        <Quote />
+
                                         <p className="mt-2">{d.content}</p>
                                         <p className="mt-7  font-bold uppercase">- {d.author}</p>
                                         <div className="flex justify-end mt-4">
                                             <HeartIcon />
-                                        </div> 
+                                        </div>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         ))}

@@ -28,7 +28,7 @@ const ProductsPage: React.FC = () => {
   };
 
   return (
-    <div className='flex px-12'>
+    <div className='flex gap-14 px-12'>
       <SideBar
         setBrandFilter={setBrandFilter}
         setPriceRangeFilter={setPriceRangeFilter}

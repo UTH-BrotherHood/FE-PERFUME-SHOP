@@ -13,6 +13,7 @@ interface IOrder {
 }
 
 interface IOrderDetail {
+    payment_method: string;
     order_id: string;
     user_id: string;
     payment_id: string;
@@ -89,11 +90,13 @@ const OrderHistory: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-6 text-primary">Order History</h1>
+        <div className="border border-gray-200 bg-white">
+            <div className="flex items-center font-bold py-4 pl-6 rounded-t border-b border-gray-200 bg-white text-gray-900 text-sm uppercase">
+                Order History
+            </div>
             {error && <div className="text-red-500 mb-4">{error}</div>}
             <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
-                <thead className="bg-primary text-white">
+                <thead className="bg-[#F5F5F7] text-[#8B8E99] text-[0.7rem]">
                     <tr>
                         <th className="py-3 px-4">ID</th>
                         <th className="py-3 px-4">Total Price</th>
@@ -104,17 +107,17 @@ const OrderHistory: React.FC = () => {
                 <tbody>
                     {orderHistory.map(order => (
                         <tr key={order.id} className="border-t">
-                            <td className="py-3 px-4">{order.id}</td>
-                            <td className="py-3 px-4">{order.total_price}</td>
-                            <td className="py-3 px-4">{new Date(order.order_date).toLocaleString()}</td>
-                            <td className="py-3 px-4">
+                            <th className="py-3 px-4 text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap font-public-sans text-sm font-normal leading-5 w-58">{order.id}</th>
+                            <th className="py-3 px-4 font-normal text-sm">${order.total_price}</th>
+                            <th className="py-3 px-4 font-normal test-sm">{new Date(order.order_date).toLocaleString()}</th>
+                            <th className="py-3 px-4 font-normal">
                                 <button
                                     onClick={() => fetchOrderDetail(order.id)}
-                                    className="text-primary hover:underline"
+                                    className="text-rose-500 italic text-sm underline hover:underline"
                                 >
                                     View
                                 </button>
-                            </td>
+                            </th>
                         </tr>
                     ))}
                 </tbody>
@@ -129,11 +132,11 @@ const OrderHistory: React.FC = () => {
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50"
             >
                 {selectedOrder && (
-                    <div className="bg-white rounded-lg p-6 shadow-xl w-full max-w-lg">
+                    <div className="bg-white rounded-lg p-6 h-[80%] overflow-y-auto shadow-xl w-full max-w-lg">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Order Detail</h2>
                         <p><strong>Order ID:</strong> {selectedOrder.order_id}</p>
                         <p><strong>User ID:</strong> {selectedOrder.user_id}</p>
-                        <p><strong>Payment ID:</strong> {selectedOrder.payment_id}</p>
+                        <p><strong>Payment Option:</strong> {selectedOrder.payment_method}</p>
                         <p><strong>Total Price:</strong> {selectedOrder.total_price}</p>
                         <p><strong>Order Date:</strong> {new Date(selectedOrder.order_date).toLocaleString()}</p>
                         <h3 className="text-xl font-semibold mt-4">Shipping Address</h3>

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import AddressPage from "../pages/AddressPage";
 import BlankLayout from "../layouts/BlankLayout";
 import DashBoardLayout from "../layouts/DashBoardLayout";
+import DashBoardUser from "../layouts/DashboardUser";
 import MainLayout from "../layouts/MainLayout";
 import AddCategory from "../pages/AddCetegory";
 import AddProduct from "../pages/AddProduct";
@@ -20,6 +22,7 @@ import ProfilePage from "../pages/ProfilePage";
 import ShippingState from "../pages/ShippingState";
 import VerifyEmail from "../pages/VerifyEmail";
 import WishList from "../pages/WishList";
+import BillingPage from "../pages/BillingPage";
 
 interface Route {
     path: string;
@@ -65,7 +68,7 @@ const publicRoutes: Route[] = [
         component: VerifyEmail,
         layout: BlankLayout,
     },
-    
+
 
     {
         path: "/cart",
@@ -90,18 +93,9 @@ const privateRoutes: Route[] = [
         component: ShippingState,
         layout: MainLayout,
     },
-    {
-        path: "/MyAccount",
-        component: ProfilePage,
-    },
-    {
-        path: "/orderhistory",
-        component: OrderHistory,
-    },
-    {
-        path: "/wishlist",
-        component: WishList,
-    },
+
+
+
     {
         path: "/dashboard/products",
         component: DashBoardProduct,
@@ -122,7 +116,32 @@ const privateRoutes: Route[] = [
         component: AddProduct,
         layout: DashBoardLayout,
     },
+    {
+        path: "/wishlist",
+        component: WishList,
+        layout: DashBoardUser
+    },
+    {
+        path: "/orderhistory",
+        component: OrderHistory,
+        layout: DashBoardUser
+    },
+    {
+        path: "/MyAccount",
+        component: ProfilePage,
+        layout: DashBoardUser
+    },
+    {
+        path: "/address",
+        component: AddressPage,
+        layout: DashBoardUser
+    },
 
+    {
+        path: "/address/billing-address",
+        component: BillingPage,
+        layout: MainLayout
+    },
 ];
 
 export { privateRoutes, publicRoutes };
