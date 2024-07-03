@@ -2,8 +2,8 @@ export interface ProductReqBody {
   category_id: string
   name: string
   description: string
-  discount: number
+  discount: string
   images: string[]
-  stock: number
-  price: number
+  stock: string
+  price: string
 }

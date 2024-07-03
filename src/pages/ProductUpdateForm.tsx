@@ -16,6 +16,7 @@ export default function ProductUpdateForm() {
     const { idUpdateProduct } = useParams<{ idUpdateProduct: string }>();
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [product, setProduct] = useState<ProductReqBody | null>(null);
 
     const { toast } = useToast();
     const navigate = useNavigate();
@@ -28,15 +29,6 @@ export default function ProductUpdateForm() {
         mode: "onBlur",
         disabled: false,
         reValidateMode: "onChange",
-        defaultValues: {
-            category_id: "",
-            name: "",
-            description: "",
-            images: [''],
-            discount: 0,
-            stock: 0,
-            price: 0,
-        },
     });
 
     useEffect(() => {
@@ -56,16 +48,7 @@ export default function ProductUpdateForm() {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                const productData = response.data.result;
-                form.reset({
-                    category_id: productData.category_id,
-                    name: productData.name,
-                    description: productData.description,
-                    images: productData.images,
-                    discount: productData.discount,
-                    stock: productData.stock,
-                    price: productData.price,
-                });
+                setProduct(response.data.result);
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
@@ -73,17 +56,13 @@ export default function ProductUpdateForm() {
 
         fetchCategories();
         fetchProductDetails();
-    }, [idUpdateProduct, token, form]);
+    }, [idUpdateProduct, token]);
 
     async function onSubmit(values: ProductReqBody) {
         if (loading) return;
         setLoading(true);
         try {
-            if (typeof values.images === 'string') {
-                values.images = [values.images];
-            } else if (!Array.isArray(values.images)) {
-                values.images = [];
-            }
+
             const result = await axios.patch(`http://localhost:8001/products/${idUpdateProduct}`, values, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -133,7 +112,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Product Name</FormLabel>
                                     <FormControl>
-                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Type product name here..." {...field} />
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder={product?.name || "Type product name here..."} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
@@ -146,7 +125,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Description</FormLabel>
                                     <FormControl>
-                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Type product description here..." {...field} />
+                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder={product?.description || "Type product description here..."} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
@@ -180,7 +159,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Discount</FormLabel>
                                     <FormControl>
-                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter discount" {...field} />
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder={product?.discount as string || "Enter discount"} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
@@ -193,7 +172,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Image Links</FormLabel>
                                     <FormControl>
-                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[4rem] border-gray-100" placeholder="Enter image links separated by commas" {...field} />
+                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[4rem] border-gray-100" placeholder={product?.images[0] || "Enter image links separated by commas"} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
@@ -206,7 +185,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Stock</FormLabel>
                                     <FormControl>
-                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter stock quantity" {...field} />
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder={product?.stock as string || "Enter stock quantity"} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
@@ -219,7 +198,7 @@ export default function ProductUpdateForm() {
                                 <FormItem className="flex gap-1 flex-col">
                                     <FormLabel className="text-text text-sm font-medium">Price</FormLabel>
                                     <FormControl>
-                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter price" {...field} />
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder={product?.price || "Enter price"} {...field} />
                                     </FormControl>
                                     <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
