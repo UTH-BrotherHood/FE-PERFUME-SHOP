@@ -56,6 +56,7 @@ export default function ProductAddForm() {
     if (loading) return;
     setLoading(true);
     try {
+      //ts-ignore
       const result = await createProduct(values, accessToken as string);
   
       toast({

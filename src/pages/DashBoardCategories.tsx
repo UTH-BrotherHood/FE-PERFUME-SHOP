@@ -15,29 +15,31 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "../components/ui/alert-dialog"
-
+import { Link } from 'react-router-dom';
 
 interface Category {
     id: string;
     name: string;
     description: string;
-    created_at?: Date;
-    updated_at?: Date;
+    created_at?: string;
+    updated_at?: string;
 }
 
 function DashBoardCategories() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
     const getToken = () => {
         return localStorage.getItem('accessToken') || '';
     };
     const token = getToken();
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get('http://localhost:8001/categories');
-                console.log("Fetched categories:", response.data.result); // Debugging log
+                console.log("Fetched categories:", response.data.result);
                 setCategories(response.data.result);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -46,8 +48,6 @@ function DashBoardCategories() {
 
         fetchCategories();
     }, []);
-
-
 
     const handleDeleteCategory = async (categoryId: string) => {
         try {
@@ -66,28 +66,42 @@ function DashBoardCategories() {
         setCurrentPage(page);
     };
 
+    const formatDate = (date: string) => {
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit' };
+        return new Date(date).toLocaleDateString(undefined, options);
+    };
+
     return (
-        <div className='p-4 px-10 relative'>
-            <h1 className="text-2xl font-bold mb-4 text-center">Dashboard</h1>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md absolute right-10 top-0 hover:bg-blue-700 active:bg-red-700">Add Category</button>
-            <div className="grid grid-cols-4 gap-4 p-2 bg-gray-200 font-semibold">
-                <div className="col-span-1 ml-14">Category</div>
-                <div className='text-center col-span-1'>Description</div>
-                <div className='text-center col-span-1'>Created At</div>
-                <div className='text-center col-span-1'>Action</div>
+        <div className='relative bg-[#F5F5F7]'>
+            <h1 className="text-2xl font-bold mb-4">Categories</h1>
+            <div className='flex justify-between items-center'>
+                <div className='flex items-center pt-2 pb-6 gap-2 text-primary text-sm font-medium'>DashBoard <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 11.9192V4.47121C6.00003 4.33938 6.03914 4.21051 6.1124 4.10091C6.18565 3.9913 6.28976 3.90587 6.41156 3.85543C6.53336 3.80498 6.66738 3.79178 6.79669 3.81749C6.92599 3.8432 7.04476 3.90667 7.138 3.99988L10.862 7.72388C10.987 7.8489 11.0572 8.01844 11.0572 8.19521C11.0572 8.37199 10.987 8.54153 10.862 8.66655L7.138 12.3905C7.04476 12.4838 6.92599 12.5472 6.79669 12.5729C6.66738 12.5986 6.53336 12.5854 6.41156 12.535C6.28976 12.4846 6.18565 12.3991 6.1124 12.2895C6.03914 12.1799 6.00003 12.051 6 11.9192Z" fill="#8B8E99" />
+                </svg> <span className='text-[#667085]'>Category List</span></div>
+                <button className="bg-primary text-white py-2 rounded-md flex p-2 mb-6 items-center px-[0.88rem] justify-center gap-2 hover:bg-blue-700 active:bg-red-700"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2 10H18" stroke="#F5F5F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10 2V18" stroke="#F5F5F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg><a href='/dashboard/categories/AddCategory' className='text-sm font-medium '>Add Category</a></button>
+            </div>
+
+            <div className="grid grid-cols-4 gap-4 p-2 text-sm bg-white font-medium rounded-t-2xl border-b-[1px]">
+                <div className='py-4 col-span-1 ml-14'>Category</div>
+                <div className='py-4 text-center col-span-1'>Description</div>
+                <div className='py-4 text-center col-span-1'>Created At</div>
+                <div className='py-4 text-center col-span-1'>Action</div>
             </div>
             {Array.isArray(categories) && categories.length > 0 ? (
                 categories.map((category) => (
-                    <div key={category.id} className="grid grid-cols-4 gap-4 p-2 border-b items-center text-center">
-                        <div className="col-span-1 flex items-center">
-                            {category.name}
+                    <div key={category.id} className="grid grid-cols-4 gap-4 p-2 border-b items-center text-center bg-white hover:bg-[#F9F9FC] ">
+                        <div className="col-span-1 flex ml-14 items-center">
+                            <div className='text-sm font-medium flex '>{category.name}</div>
                         </div>
-                        <div className='col-span-1'>{category.description}</div>
-                        <div className='col-span-1'>{new Date(category.created_at || '').toLocaleDateString()}</div>
-                        <div className="flex space-x-2 justify-center col-span-1">
-                            <button className="text-primary hover:text-blue-700">
+                        <div className='capitalize text-sm font-medium text-[#667085] col-span-1'>{category.description}</div>
+                        <div className='text-sm font-medium text-[#667085] col-span-1'>{formatDate(category.created_at as string)}</div>
+                        <div className="flex gap-3 items-center justify-center col-span-1">
+                            <Link to={`/dashboard/categories/${category.id}`} className="text-primary hover:text-blue-700">
                                 <MdModeEdit />
-                            </button>
+                            </Link>
                             <button className="text-red-500 hover:text-red-700">
                                 <AlertDialog>
                                     <AlertDialogTrigger>

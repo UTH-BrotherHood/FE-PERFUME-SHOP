@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductReqBody } from "../schemaValidations/product.schema";
 import { useToast } from "../components/ui/use-toast";
@@ -18,6 +17,28 @@ export default function ProductUpdateForm() {
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
 
+    const { toast } = useToast();
+    const navigate = useNavigate();
+    const getToken = () => {
+        return localStorage.getItem('accessToken') || '';
+    };
+    const token = getToken();
+
+    const form = useForm<ProductReqBody>({
+        mode: "onBlur",
+        disabled: false,
+        reValidateMode: "onChange",
+        defaultValues: {
+            category_id: "",
+            name: "",
+            description: "",
+            images: [''],
+            discount: 0,
+            stock: 0,
+            price: 0,
+        },
+    });
+
     useEffect(() => {
         async function fetchCategories() {
             try {
@@ -28,25 +49,31 @@ export default function ProductUpdateForm() {
             }
         }
 
+        async function fetchProductDetails() {
+            try {
+                const response = await axios.get(`http://localhost:8001/products/${idUpdateProduct}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                const productData = response.data.result;
+                form.reset({
+                    category_id: productData.category_id,
+                    name: productData.name,
+                    description: productData.description,
+                    images: productData.images,
+                    discount: productData.discount,
+                    stock: productData.stock,
+                    price: productData.price,
+                });
+            } catch (error) {
+                console.error("Error fetching product details:", error);
+            }
+        }
+
         fetchCategories();
-    }, []);
-    const { toast } = useToast();
-    const navigate = useNavigate();
-    const getToken = () => {
-        return localStorage.getItem('accessToken') || '';
-    };
-    const token = getToken();
-    const form = useForm<ProductReqBody>({
-        mode: "onBlur",
-        disabled: false,
-        reValidateMode: "onChange",
-        defaultValues: {
-            category_id: "",
-            name: "",
-            description: "",
-            images: [''],
-        },
-    });
+        fetchProductDetails();
+    }, [idUpdateProduct, token, form]);
 
     async function onSubmit(values: ProductReqBody) {
         if (loading) return;
@@ -69,145 +96,140 @@ export default function ProductUpdateForm() {
                 duration: 10000,
             });
 
+            navigate('/dashboard/products');
         } catch (error: any) {
-
             handleErrorsApi({
                 error: error.response.data,
                 setError: form.setError,
             });
         } finally {
             setLoading(false);
-            navigate('/dashboard/products')
         }
     }
 
     return (
         <Form {...form}>
+            <h1 className="text-2xl font-bold mb-4">Update Product</h1>
+            <div className='flex justify-between items-center'>
+                <div className='flex items-center pt-2 pb-6 gap-2 text-primary text-sm font-medium'>DashBoard
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 11.9192V4.47121C6.00003 4.33938 6.03914 4.21051 6.1124 4.10091C6.18565 3.9913 6.28976 3.90587 6.41156 3.85543C6.53336 3.80498 6.66738 3.79178 6.79669 3.81749C6.92599 3.8432 7.04476 3.90667 7.138 3.99988L10.862 7.72388C10.987 7.8489 11.0572 8.01844 11.0572 8.19521C11.0572 8.37199 10.987 8.54153 10.862 8.66655L7.138 12.3905C7.04476 12.4838 6.92599 12.5472 6.79669 12.5729C6.66738 12.5986 6.53336 12.5854 6.41156 12.535C6.28976 12.4846 6.18565 12.3991 6.1124 12.2895C6.03914 12.1799 6.00003 12.051 6 11.9192Z" fill="#8B8E99" />
+                    </svg>
+                    <span className='text-primary'>Product List</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 11.9192V4.47121C6.00003 4.33938 6.03914 4.21051 6.1124 4.10091C6.18565 3.9913 6.28976 3.90587 6.41156 3.85543C6.53336 3.80498 6.66738 3.79178 6.79669 3.81749C6.92599 3.8432 7.04476 3.90667 7.138 3.99988L10.862 7.72388C10.987 7.8489 11.0572 8.01844 11.0572 8.19521C11.0572 8.37199 10.987 8.54153 10.862 8.66655L7.138 12.3905C7.04476 12.4838 6.92599 12.5472 6.79669 12.5729C6.66738 12.5986 6.53336 12.5854 6.41156 12.535C6.28976 12.4846 6.18565 12.3991 6.1124 12.2895C6.03914 12.1799 6.00003 12.051 6 11.9192Z" fill="#8B8E99" />
+                    </svg>
+                    <span className='text-[#667085]'>Update Product</span>
+                </div>
+            </div>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 items-center">
-                <div className="flex flex-col gap-11">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <div className="relative flex flex-col gap-4">
-                                <FormItem className="flex items-center">
-                                    <FormLabel className="w-[6rem] text-text">Product's Name</FormLabel>
+                <div className="flex flex-col gap-11 w-full">
+                    <section className="bg-white rounded-xl p-6 w-[80%]">
+                        <p className="text-[1.125rem] font-semibold pb-[0.8rem]">General Information</p>
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Product Name</FormLabel>
                                     <FormControl>
-                                        <Input className="w-[24rem] h-[3rem] rounded-sm" placeholder="Input Product's Name" {...field} />
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Type product name here..." {...field} />
                                     </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
-                                <FormMessage className="absolute top-full left-0 ml-[6rem] text-xs" />
-                            </div>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="category_id"
-                        render={({ field }) => (
-                            <div className="relative flex  gap-2">
-                                <label className="w-[6rem] text-text">Category</label>
-                                <div className="w-[180px] bg-white">
-                                    <select {...field} className="w-full border border-gray-300 rounded-md p-2 focus:outline-none">
-                                        <option value="">Select a category</option>
-                                        {categories.map((category: any) => (
-                                            <option key={category.id} value={category.id}>{category.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <span className="absolute top-full left-0 ml-[6rem] text-xs text-red-500">
-                                    {/* Form validation error message */}
-                                </span>
-                            </div>
-                        )}
-                    />
-
-
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <div className="relative flex flex-col gap-2">
-                                <FormItem className="flex items-center">
-                                    <FormLabel className="w-[6rem] text-text">Description</FormLabel>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Description</FormLabel>
                                     <FormControl>
-                                        <Input className="w-[24rem] h-[3rem] rounded-sm" placeholder="Description" {...field} />
+                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Type product description here..." {...field} />
                                     </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
-                                <FormMessage className="absolute top-full left-0 text-xs" />
-                            </div>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="discount"
-                        render={({ field }) => (
-                            <div className="relative flex flex-col gap-2">
-                                <FormItem className="flex items-center">
-                                    <FormLabel className="w-[6rem] text-text">Discount</FormLabel>
+                            )}
+                        />
+                    </section>
+                    <section className="bg-white rounded-xl p-6 w-[80%]">
+                        <p className="text-[1.125rem] font-semibold pb-[0.8rem]">Additional Information</p>
+                        <FormField
+                            control={form.control}
+                            name="category_id"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Category</FormLabel>
                                     <FormControl>
-                                        <Input className="w-[24rem] h-[3rem] rounded-sm" placeholder="Discount" {...field} />
+                                        <select {...field} className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100">
+                                            <option value="">Select a category</option>
+                                            {categories.map((category: any) => (
+                                                <option key={category.id} value={category.id}>{category.name}</option>
+                                            ))}
+                                        </select>
                                     </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
                                 </FormItem>
-                                <FormMessage className="absolute top-full left-0 text-xs" />
-                            </div>
-                        )}
-                    />
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="discount"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Discount</FormLabel>
+                                    <FormControl>
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter discount" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="images"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Image Links</FormLabel>
+                                    <FormControl>
+                                        <Textarea className="w-full rounded-[0.5rem] bg-gray-50 h-[4rem] border-gray-100" placeholder="Enter image links separated by commas" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="stock"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Stock</FormLabel>
+                                    <FormControl>
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter stock quantity" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem className="flex gap-1 flex-col">
+                                    <FormLabel className="text-text text-sm font-medium">Price</FormLabel>
+                                    <FormControl>
+                                        <Input className="w-full rounded-[0.5rem] bg-gray-50 h-[2.5rem] border-gray-100" placeholder="Enter price" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-xs text-red-500" />
+                                </FormItem>
+                            )}
+                        />
+                    </section>
                 </div>
-                <FormField
-                    control={form.control}
-                    name="images"
-                    render={({ field }) => (
-                        <div className="relative flex flex-col gap-2">
-                            <FormItem className="flex items-center">
-                                <FormLabel className="w-[6rem] text-text">Image Links</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        className="w-[24rem] h-[6rem] rounded-sm"
-                                        placeholder="Enter image links separated by commas"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                            <FormMessage className="absolute top-full left-0 text-xs" />
-                        </div>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="stock"
-                    render={({ field }) => (
-                        <div className="relative flex flex-col gap-2">
-                            <FormItem className="flex items-center">
-                                <FormLabel className="w-[6rem] text-text">Stock</FormLabel>
-                                <FormControl>
-                                    <Input className="w-[24rem] h-[3rem] rounded-sm" placeholder="Stock" {...field} />
-                                </FormControl>
-                            </FormItem>
-                            <FormMessage className="absolute top-full left-0 text-xs" />
-                        </div>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                        <div className="relative flex flex-col gap-2">
-                            <FormItem className="flex items-center">
-                                <FormLabel className="w-[6rem] text-text">Price</FormLabel>
-                                <FormControl>
-                                    <Input className="w-[24rem] h-[3rem] rounded-sm" placeholder="Price" {...field} />
-                                </FormControl>
-                            </FormItem>
-                            <FormMessage className="absolute top-full left-0 text-xs" />
-                        </div>
-                    )}
-                />
-                <div className="flex gap-11">
-                    <Button type="submit" className="w-[17rem] h-[2.8rem] uppercase font-bold text-white rounded-sm">
-                      Update Form
-                    </Button>
-                </div>
+                <Button type="submit" className="w-[17rem] h-[2.8rem] uppercase font-bold text-white rounded-sm bg-primary hover:bg-primary-dark mt-4">
+                    Update Product
+                </Button>
             </form>
         </Form>
     );

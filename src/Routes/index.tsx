@@ -23,6 +23,7 @@ import ShippingState from "../pages/ShippingState";
 import VerifyEmail from "../pages/VerifyEmail";
 import WishList from "../pages/WishList";
 import BillingPage from "../pages/BillingPage";
+import CategoryUpdateForm from "../pages/CategoryUpdateForm";
 
 interface Route {
     path: string;
@@ -116,6 +117,22 @@ const privateRoutes: Route[] = [
         component: AddProduct,
         layout: DashBoardLayout,
     },
+    {
+        path: "/dashboard/categories/AddCategory",
+        component: AddCategory,
+        layout: DashBoardLayout,
+    },
+    {
+        path: "/dashboard/categories/:idUpdateCategory",
+        component: CategoryUpdateForm,
+        layout: DashBoardLayout,
+    },
+     {
+        path: "/dashboard/products/:idUpdateProduct",
+        component: ProductUpdateForm,
+        layout: DashBoardLayout,
+    },
+   
     {
         path: "/wishlist",
         component: WishList,
